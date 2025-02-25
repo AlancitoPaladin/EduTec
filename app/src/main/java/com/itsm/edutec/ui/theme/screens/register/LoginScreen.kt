@@ -58,7 +58,7 @@ fun LoginScreen(navHostController: NavHostController) {
         isPlaying = true,
         composition = composition,
         iterations = LottieConstants.IterateForever,
-        speed = 0.7f
+        speed = 1.0f
     )
 
     Column(
@@ -101,7 +101,8 @@ fun LoginScreen(navHostController: NavHostController) {
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
-            )
+            ),
+            singleLine = true
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -134,7 +135,8 @@ fun LoginScreen(navHostController: NavHostController) {
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
-            )
+            ),
+            singleLine = true
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -170,7 +172,7 @@ fun LoginScreen(navHostController: NavHostController) {
                 text = "Regístrate ahora",
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.clickable {
-                    // Acción de registro
+                    navHostController.navigate("register_user")
                 }
             )
         }
