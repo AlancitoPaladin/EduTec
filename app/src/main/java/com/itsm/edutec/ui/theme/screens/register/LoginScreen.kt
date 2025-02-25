@@ -58,7 +58,7 @@ fun LoginScreen(navHostController: NavHostController) {
         isPlaying = true,
         composition = composition,
         iterations = LottieConstants.IterateForever,
-        speed = 1.0f
+        speed = 0.5f
     )
 
     Column(
@@ -159,7 +159,7 @@ fun LoginScreen(navHostController: NavHostController) {
             text = "¿Olvidaste la contraseña?",
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.clickable {
-                // Handle forgot password logic
+                navHostController.navigate("forgot_password")
             }
         )
 

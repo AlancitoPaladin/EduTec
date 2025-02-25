@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,8 +17,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -34,8 +31,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -45,7 +40,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -59,13 +53,14 @@ fun RegisterUser(navController: NavController) {
             .fillMaxHeight()
             .background(
                 color = Color.Transparent
-            )
+            ),
+        contentAlignment = Alignment.Center
     ) {
 
         Box(
             modifier = Modifier
                 .background(
-                    color = MaterialTheme.colorScheme.primary,
+                    color = Color.Transparent,
                     shape = RoundedCornerShape(25.dp, 5.dp, 25.dp, 5.dp)
                 )
                 .align(Alignment.BottomCenter)
@@ -83,24 +78,29 @@ fun RegisterUser(navController: NavController) {
             Column(
                 modifier = Modifier
                     .padding(16.dp)
+                    .background(Color.Transparent)
                     .fillMaxWidth()
                     .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(modifier = Modifier.height(30.dp))
+                Spacer(modifier = Modifier.height(150.dp))
 
                 Text(
                     text = "Crear una cuenta",
+                    maxLines = 1,
                     textAlign = TextAlign.Center,
+                    fontSize = 32.sp,
                     modifier = Modifier
-                        .padding(130.dp)
+                        .padding(40.dp)
                         .fillMaxWidth(),
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.primary
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
                 RegisterName()
+
+                Spacer(modifier = Modifier.height(3.dp))
+                RegisterSecondName()
 
                 Spacer(modifier = Modifier.height(3.dp))
                 RegisterEmail()
@@ -111,8 +111,8 @@ fun RegisterUser(navController: NavController) {
                 Spacer(modifier = Modifier.height(3.dp))
                 RegisterPasswordConfirm()
 
-                val gradientColor = listOf(Color(0xFF03A9F4), Color(0xFF00BCD4))
-                val cornerRadius = 16.dp
+                val gradientColor = listOf(Color(0xFF187E1E), Color(0xFF197E19))
+                val cornerRadius = 32.dp
 
                 Spacer(modifier = Modifier.height(10.dp))
 
@@ -142,51 +142,6 @@ fun RegisterUser(navController: NavController) {
 }
 
 @Composable
-private fun GradientButton(
-    gradientColors: List<Color>,
-    cornerRadius: Dp,
-    nameButton: String,
-    roundedCornerShape: RoundedCornerShape
-) {
-
-    Button(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 32.dp, end = 32.dp),
-        onClick = {
-            // Lógica de envío de registro a la API
-        },
-        contentPadding = PaddingValues(),
-        colors = ButtonDefaults.buttonColors(
-            contentColor = Color.Transparent
-        ),
-        shape = RoundedCornerShape(cornerRadius)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    brush = Brush.horizontalGradient(colors = gradientColors),
-                    shape = roundedCornerShape
-                )
-                .clip(roundedCornerShape)
-                .background(
-                    brush = Brush.linearGradient(colors = gradientColors),
-                    shape = RoundedCornerShape(cornerRadius)
-                )
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = nameButton,
-                fontSize = 20.sp,
-                color = Color.White
-            )
-        }
-    }
-}
-
-@Composable
 fun RegisterName() {
     val keyboardController = LocalSoftwareKeyboardController.current
     var text by rememberSaveable { mutableStateOf("") }
@@ -203,6 +158,42 @@ fun RegisterName() {
             )
         },
         placeholder = { Text(text = "Nombre") },
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Done
+        ),
+        keyboardActions = KeyboardActions(
+            onDone = {
+                keyboardController?.hide()
+                // Más lógica es possible
+            }
+        ),
+        colors = TextFieldDefaults.colors(
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+            unfocusedIndicatorColor = MaterialTheme.colorScheme.primary
+        ),
+        singleLine = true,
+        modifier = Modifier.fillMaxWidth(0.8f)
+    )
+}
+
+@Composable
+fun RegisterSecondName() {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    var text by rememberSaveable { mutableStateOf("") }
+
+    TextField(
+        value = text,
+        onValueChange = { text = it },
+        shape = RoundedCornerShape(topEnd = 12.dp, bottomStart = 12.dp),
+        label = {
+            Text(
+                text = "Apellido paterno",
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.labelMedium
+            )
+        },
+        placeholder = { Text(text = "Apellido paterno") },
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Text,
             imeAction = ImeAction.Done
@@ -253,32 +244,33 @@ fun RegisterEmail() {
 }
 
 @Composable
-fun RegisterPassword() {
-    val keyboardController = LocalSoftwareKeyboardController.current
-    var password by rememberSaveable { mutableStateOf("") }
-    var passwordHidden by rememberSaveable { mutableStateOf(true) }
-
+fun RegisterPasswordField(
+    label: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    passwordHidden: Boolean,
+    onPasswordVisibilityToggle: () -> Unit
+) {
     TextField(
-        value = password,
-        onValueChange = { password = it },
+        value = value,
+        onValueChange = onValueChange,
         shape = RoundedCornerShape(topEnd = 12.dp, bottomStart = 12.dp),
         label = {
             Text(
-                text = "Ingresa la contraseña",
+                text = label,
                 color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.labelMedium,
             )
         },
-        visualTransformation =
-        if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
+        visualTransformation = if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password,
             imeAction = ImeAction.Done
         ),
         keyboardActions = KeyboardActions(
             onDone = {
-                keyboardController?.hide()
-                // Puedes agregar más lógica aquí
+                //LocalSoftwareKeyboardController.current?.hide()
+                // Lógica adicional aquí si es necesaria
             }
         ),
         colors = TextFieldDefaults.colors(
@@ -286,7 +278,7 @@ fun RegisterPassword() {
             unfocusedIndicatorColor = MaterialTheme.colorScheme.primary
         ),
         trailingIcon = {
-            IconButton(onClick = { passwordHidden = !passwordHidden }) {
+            IconButton(onClick = onPasswordVisibilityToggle) {
                 Icon(
                     imageVector = if (passwordHidden) Icons.Default.Visibility else Icons.Default.VisibilityOff,
                     contentDescription = if (passwordHidden) "Mostrar contraseña" else "Ocultar contraseña"
@@ -299,47 +291,29 @@ fun RegisterPassword() {
 }
 
 @Composable
-fun RegisterPasswordConfirm() {
-    val keyboardController = LocalSoftwareKeyboardController.current
+fun RegisterPassword() {
     var password by rememberSaveable { mutableStateOf("") }
     var passwordHidden by rememberSaveable { mutableStateOf(true) }
 
-    TextField(
+    RegisterPasswordField(
+        label = "Ingresa la contraseña",
         value = password,
         onValueChange = { password = it },
-        shape = RoundedCornerShape(topEnd = 12.dp, bottomStart = 12.dp),
-        label = {
-            Text(
-                text = "Ingresa la contraseña",
-                color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.labelMedium,
-            )
-        },
-        visualTransformation =
-        if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Password,
-            imeAction = ImeAction.Done
-        ),
-        keyboardActions = KeyboardActions(
-            onDone = {
-                keyboardController?.hide()
-                // Puedes agregar más lógica aquí
-            }
-        ),
-        colors = TextFieldDefaults.colors(
-            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-            unfocusedIndicatorColor = MaterialTheme.colorScheme.primary
-        ),
-        trailingIcon = {
-            IconButton(onClick = { passwordHidden = !passwordHidden }) {
-                Icon(
-                    imageVector = if (passwordHidden) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                    contentDescription = if (passwordHidden) "Mostrar contraseña" else "Ocultar contraseña"
-                )
-            }
-        },
-        modifier = Modifier.fillMaxWidth(0.8f),
-        singleLine = true
+        passwordHidden = passwordHidden,
+        onPasswordVisibilityToggle = { passwordHidden = !passwordHidden }
+    )
+}
+
+@Composable
+fun RegisterPasswordConfirm() {
+    var confirmPassword by rememberSaveable { mutableStateOf("") }
+    var confirmPasswordHidden by rememberSaveable { mutableStateOf(true) }
+
+    RegisterPasswordField(
+        label = "Confirma la contraseña",
+        value = confirmPassword,
+        onValueChange = { confirmPassword = it },
+        passwordHidden = confirmPasswordHidden,
+        onPasswordVisibilityToggle = { confirmPasswordHidden = !confirmPasswordHidden }
     )
 }
