@@ -13,7 +13,7 @@ navigationCompose = "2.8.7"
 material_icons = "1.7.8"
 retrofit = "2.11.0"
 okhttp = "4.12.0"
-gson = "2.12.1"
+gson = "2.10.0"
 glide = "4.15.0"
 
 [libraries]
@@ -35,10 +35,9 @@ lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "material_icons" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "gson" }
-retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
-okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
-glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "gson" }
+okhttp-logging = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
