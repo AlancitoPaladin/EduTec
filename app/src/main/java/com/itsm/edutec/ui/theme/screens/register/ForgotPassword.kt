@@ -95,7 +95,7 @@ fun ForgotPassword(navController: NavController) {
                     gradientColors = gradientColor,
                     cornerRadius = cornerRadius,
                     nameButton = "Enviar",
-                    roundedCornerShape = RoundedCornerShape(topStart = 30.dp, bottomEnd = 30.dp)
+                    roundedCornerShape = RoundedCornerShape(topStart = 15.dp, bottomEnd = 15.dp)
                 )
             }
         }
