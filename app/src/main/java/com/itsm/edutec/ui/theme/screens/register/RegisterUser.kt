@@ -63,7 +63,7 @@ fun RegisterUser(navController: NavController) {
                     color = Color.Transparent,
                     shape = RoundedCornerShape(25.dp, 5.dp, 25.dp, 5.dp)
                 )
-                .align(Alignment.BottomCenter)
+                .align(Alignment.Center)
         ) {
 
             Image(
@@ -120,7 +120,7 @@ fun RegisterUser(navController: NavController) {
                     gradientColors = gradientColor,
                     cornerRadius = cornerRadius,
                     nameButton = "Crear cuenta",
-                    roundedCornerShape = RoundedCornerShape(topStart = 30.dp, bottomEnd = 30.dp)
+                    roundedCornerShape = RoundedCornerShape(topStart = 10.dp, bottomEnd = 10.dp)
                 )
 
                 Spacer(modifier = Modifier.padding(10.dp))

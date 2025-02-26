@@ -150,7 +150,7 @@ fun LoginScreen(navHostController: NavHostController) {
                 .fillMaxWidth()
                 .padding(horizontal = 90.dp)
         ) {
-            Text(text = "Login")
+            Text(text = "Ingresar")
         }
 
         Spacer(modifier = Modifier.height(16.dp))

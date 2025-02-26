@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -48,37 +49,38 @@ fun ForgotPassword(navController: NavController) {
             )
     ) {
         Box(
-            modifier = Modifier.align(Alignment.BottomCenter),
+            modifier = Modifier.align(Alignment.Center),
         ) {
             Image(
-                painter = painterResource(id = R.drawable.user_reg),
+                painter = painterResource(id = R.drawable.forget_password),
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .height(180.dp)
+                    .height(140.dp)
                     .fillMaxWidth(),
             )
-            Column (
-              modifier = Modifier
-                  .padding(16.dp)
-                  .fillMaxWidth()
-                  .verticalScroll(rememberScrollState()),
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(modifier = Modifier.height(50.dp))
+                Spacer(modifier = Modifier.height(130.dp))
 
-                Text("Recuperar contraseña",
+                Text(
+                    "Recuperar contraseña",
                     textAlign = TextAlign.Center,
                     maxLines = 1,
-                    fontSize = 12.sp,
+                    fontSize = 28.sp,
                     modifier = Modifier
-                        .padding(130.dp)
-                        .fillMaxWidth(),
+                        .padding(10.dp)
+                        .fillMaxSize(),
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.primary
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(40.dp))
 
                 ResetEmailID()
 
@@ -111,12 +113,12 @@ fun ResetEmailID() {
         shape = RoundedCornerShape(topEnd = 12.dp, bottomStart = 12.dp),
         label = {
             Text(
-                text = "Nombre",
+                text = "Correo electrónico",
                 color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.labelMedium
             )
         },
-        placeholder = { Text(text = "Nombre") },
+        placeholder = { Text(text = "Correo electrónico") },
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Text,
             imeAction = ImeAction.Done
