@@ -215,7 +215,6 @@ fun RegisterSecondName() {
 
 @Composable
 fun RegisterEmail() {
-    val keyboardController = LocalSoftwareKeyboardController.current
     var text: String by rememberSaveable { mutableStateOf("") }
 
     TextField(
