@@ -11,11 +11,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBackIosNew
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -32,9 +38,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -43,16 +47,26 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.itsm.edutec.R
 
+@Preview
+@Composable
+fun MyPreview() {
+    val navController = rememberNavController()
+    ForgotPassword(navController)
+}
 
 @Composable
 fun ForgotPassword(navController: NavController) {
     val offset = Offset(3.0f, 4.0f)
-    val gradientColors = listOf(Color(0xFF6436F5), Color(0xFF925FF3))
+    val
+            gradientColors = listOf(Color(0xFF36D8F5), Color(0xFF7EF8CF))
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -76,11 +90,10 @@ fun ForgotPassword(navController: NavController) {
                         .fillMaxWidth()
                         .fillMaxHeight()
                 ) {
-                    FadeImageFromCenterToBottom()
+                    FadeImageFromCenterToBottom(navController)
                 }
 
                 Spacer(modifier = Modifier.height(140.dp))
-
 
                 Text(
                     "Recuperar contraseña",
@@ -109,7 +122,7 @@ fun ForgotPassword(navController: NavController) {
 
                 Spacer(modifier = Modifier.padding(3.dp))
 
-                val gradientColor = listOf(Color(0xFF2E49F5), Color(0xFF815CB4))
+                val gradientColor = listOf(Color(0xFF58C8E7), Color(0xFF56D2DC))
                 val cornerRadius = 32.dp
 
                 Spacer(modifier = Modifier.padding(10.dp))
@@ -162,7 +175,7 @@ fun ResetEmailID() {
 }
 
 @Composable
-fun FadeImageFromCenterToBottom() {
+fun FadeImageFromCenterToBottom(navController: NavController) {
     val image = painterResource(id = R.drawable.forget_password)
 
     Box(
@@ -176,23 +189,33 @@ fun FadeImageFromCenterToBottom() {
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxSize()
-                .graphicsLayer {
-                    alpha = 1f
-                    compositingStrategy = CompositingStrategy.Offscreen
-                }
                 .drawWithContent {
                     drawContent()
                     val fadeBrush = Brush.verticalGradient(
-                        colors = listOf(
-                            Color.Black,
-                            Color.Transparent
-                        ),
-                        startY = size.height / 30,
+                        colors = listOf(Color.Black, Color.Transparent),
+                        startY = size.height / 2,
                         endY = size.height
                     )
-
                     drawRect(brush = fadeBrush, blendMode = BlendMode.DstIn)
                 }
         )
+
+        IconButton(
+            onClick = { navController.popBackStack() },
+            modifier = Modifier
+                .size(100.dp),
+            colors = IconButtonDefaults.iconButtonColors(
+                contentColor = Color.White
+            )
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.ArrowBackIosNew,
+                contentDescription = "Volver",
+                modifier = Modifier
+                    .padding(16.dp)
+                    .zIndex(1f)
+                    .size(48.dp)
+            )
+        }
     }
 }
