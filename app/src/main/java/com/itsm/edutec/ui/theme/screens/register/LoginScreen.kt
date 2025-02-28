@@ -88,7 +88,7 @@ fun LoginScreen(navHostController: NavHostController) {
             label = {
                 Text(
                     emailError.ifEmpty { "Email" },
-                    color = if (emailError.isNotEmpty()) Color.Red else Color.Black
+                    color = if (emailError.isNotEmpty()) Color.Red else MaterialTheme.colorScheme.primary
                 )
             },
             leadingIcon = {
@@ -113,7 +113,7 @@ fun LoginScreen(navHostController: NavHostController) {
             label = {
                 Text(
                     passwordError.ifEmpty { "Contraseña" },
-                    color = if (passwordError.isNotEmpty()) Color.Red else Color.Black
+                    color = if (passwordError.isNotEmpty()) Color.Red else MaterialTheme.colorScheme.primary
                 )
             },
             leadingIcon = {
