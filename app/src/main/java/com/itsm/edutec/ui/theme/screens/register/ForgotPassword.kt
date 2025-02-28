@@ -43,24 +43,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.itsm.edutec.R
 
-@Preview(showBackground = true)
-@Composable
-fun MyPreview() {
-    val navController = rememberNavController()
-    ForgotPassword(navController)
-}
 
 @Composable
 fun ForgotPassword(navController: NavController) {
     val offset = Offset(3.0f, 4.0f)
-    val gradientColors = listOf(Color(0xFF3903B7), Color(0xFF6A29DE))
+    val gradientColors = listOf(Color(0xFF6436F5), Color(0xFF925FF3))
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -107,7 +99,7 @@ fun ForgotPassword(navController: NavController) {
                             offset = offset,
                             blurRadius = 0.1f
                         ),
-                        fontWeight = FontWeight.ExtraBold
+                        fontWeight = FontWeight.Medium
                     )
                 )
 
@@ -180,25 +172,23 @@ fun FadeImageFromCenterToBottom() {
     ) {
         Image(
             painter = image,
-            contentDescription = "Imagen con desvanecimiento",
+            contentDescription = "Password",
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxSize()
                 .graphicsLayer {
-                    alpha = 0.99f
+                    alpha = 1f
                     compositingStrategy = CompositingStrategy.Offscreen
                 }
                 .drawWithContent {
                     drawContent()
-
-                    // Degradado corregido: comienza sólido y se desvanece hacia abajo
                     val fadeBrush = Brush.verticalGradient(
                         colors = listOf(
-                            Color.Black, // Sólido en el centro (sin transparencia)
-                            Color.Transparent // Se desvanece hacia la parte inferior
+                            Color.Black,
+                            Color.Transparent
                         ),
-                        startY = size.height / 2, // Inicia el efecto en la mitad
-                        endY = size.height // Termina completamente transparente en la parte inferior
+                        startY = size.height / 30,
+                        endY = size.height
                     )
 
                     drawRect(brush = fadeBrush, blendMode = BlendMode.DstIn)
