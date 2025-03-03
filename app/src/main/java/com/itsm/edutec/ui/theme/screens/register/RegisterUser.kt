@@ -36,7 +36,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -50,7 +49,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.itsm.edutec.R
 import com.itsm.edutec.ui.theme.components.GradientButton
-import com.itsm.edutec.ui.theme.navigation.NavigateToLoginButton
+import com.itsm.edutec.ui.theme.navigation.BackToLoginButton
+
 
 @Composable
 fun RegisterUser(navController: NavController) {
@@ -59,17 +59,24 @@ fun RegisterUser(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Transparent),
-        contentAlignment = Alignment.Center
+            .background(Color.Transparent)
     ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            contentAlignment = Alignment.TopStart
+        ) {
+            BackToLoginButton(navController)
+        }
 
         Box(
             modifier = Modifier
+                .align(Alignment.Center)
                 .background(
                     color = Color.Transparent,
                     shape = RoundedCornerShape(25.dp, 5.dp, 25.dp, 5.dp)
                 )
-                .align(Alignment.Center)
         ) {
 
             Image(
@@ -108,10 +115,8 @@ fun RegisterUser(navController: NavController) {
                 }
 
                 RegisterPassword()
-
                 Spacer(modifier = Modifier.height(3.dp))
                 RegisterPasswordConfirm()
-
                 Spacer(modifier = Modifier.height(3.dp))
                 RoleMenu()
 
@@ -126,15 +131,11 @@ fun RegisterUser(navController: NavController) {
                     nameButton = "Crear cuenta",
                     roundedCornerShape = RoundedCornerShape(topStart = 10.dp, bottomEnd = 10.dp)
                 )
-
-                Spacer(modifier = Modifier.padding(10.dp))
-                NavigateToLoginButton(navController)
-
-                Spacer(modifier = Modifier.height(20.dp))
             }
         }
     }
 }
+
 
 @Composable
 fun Registers(name: String) {
@@ -244,38 +245,37 @@ fun RoleMenu() {
     var value by rememberSaveable { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
 
-    // TextField
-    TextField(
-        value = value,
-        onValueChange = { value = it },
-        label = {
-            Text(
-                "Selecciona tu rol",
-                color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.labelMedium
-            )
-        },
-        shape = RoundedCornerShape(topEnd = 12.dp, bottomStart = 12.dp),
-        colors = TextFieldDefaults.colors(
-            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-            unfocusedIndicatorColor = MaterialTheme.colorScheme.primary
-        ),
-        trailingIcon = {
-            Icon(
-                imageVector = Icons.Default.ArrowDropDown,
-                contentDescription = "Dropdown Menu",
-                modifier = Modifier.size(24.dp)
-            )
-        },
+    Box(
         modifier = Modifier
             .fillMaxWidth(0.8f)
             .clickable { expanded = true }
-            .onFocusChanged { focusState ->
-                if (!focusState.isFocused) {
-                    expanded = false
-                }
-            }
-    )
+    ) {
+        TextField(
+            value = value,
+            onValueChange = { },
+            label = {
+                Text(
+                    "Selecciona tu rol",
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.labelMedium
+                )
+            },
+            shape = RoundedCornerShape(topEnd = 12.dp, bottomStart = 12.dp),
+            colors = TextFieldDefaults.colors(
+                focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                unfocusedIndicatorColor = MaterialTheme.colorScheme.primary
+            ),
+            trailingIcon = {
+                Icon(
+                    imageVector = Icons.Default.ArrowDropDown,
+                    contentDescription = "Dropdown Menu",
+                    modifier = Modifier.size(24.dp)
+                )
+            },
+            enabled = false,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
 
     DropdownMenu(
         expanded = expanded,

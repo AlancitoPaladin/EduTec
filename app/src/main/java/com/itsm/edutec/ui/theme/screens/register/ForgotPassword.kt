@@ -11,17 +11,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBackIosNew
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -51,10 +45,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.itsm.edutec.R
 import com.itsm.edutec.ui.theme.components.GradientButton
+import com.itsm.edutec.ui.theme.navigation.BackToLoginButton
+
 
 @Composable
 fun ForgotPassword(navController: NavController) {
@@ -200,23 +195,6 @@ fun FadeImageFromCenterToBottom(navController: NavController) {
                     drawRect(brush = fadeBrush, blendMode = BlendMode.DstIn)
                 }
         )
-
-        IconButton(
-            onClick = { navController.popBackStack() },
-            modifier = Modifier
-                .size(100.dp),
-            colors = IconButtonDefaults.iconButtonColors(
-                contentColor = Color.White
-            )
-        ) {
-            Icon(
-                imageVector = Icons.Rounded.ArrowBackIosNew,
-                contentDescription = "Volver",
-                modifier = Modifier
-                    .padding(16.dp)
-                    .zIndex(1f)
-                    .size(48.dp)
-            )
-        }
+        BackToLoginButton(navController)
     }
 }
