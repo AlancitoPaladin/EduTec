@@ -54,6 +54,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.itsm.edutec.R
+import com.itsm.edutec.ui.theme.components.GradientButton
 
 @Composable
 fun ForgotPassword(navController: NavController) {

@@ -1,4 +1,4 @@
-package com.itsm.edutec.ui.theme.screens.register
+package com.itsm.edutec.ui.theme.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
