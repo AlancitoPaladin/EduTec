@@ -5,7 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -33,7 +33,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -47,13 +46,12 @@ import com.itsm.edutec.R
 
 @Composable
 fun RegisterUser(navController: NavController) {
+    val attributes = listOf("Nombre", "Apellidos", "Correo electrónico")
+
     Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .background(
-                color = Color.Transparent
-            ),
+            .fillMaxSize()
+            .background(Color.Transparent),
         contentAlignment = Alignment.Center
     ) {
 
@@ -78,7 +76,6 @@ fun RegisterUser(navController: NavController) {
             Column(
                 modifier = Modifier
                     .padding(16.dp)
-                    .background(Color.Transparent)
                     .fillMaxWidth()
                     .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -97,13 +94,10 @@ fun RegisterUser(navController: NavController) {
                     color = MaterialTheme.colorScheme.primary
                 )
 
-                RegisterName()
-
-                Spacer(modifier = Modifier.height(3.dp))
-                RegisterSecondName()
-
-                Spacer(modifier = Modifier.height(3.dp))
-                RegisterEmail()
+                attributes.forEach { fieldName ->
+                    Registers(fieldName)
+                    Spacer(modifier = Modifier.height(3.dp))
+                }
 
                 Spacer(modifier = Modifier.height(3.dp))
                 RegisterPassword()
@@ -124,16 +118,7 @@ fun RegisterUser(navController: NavController) {
                 )
 
                 Spacer(modifier = Modifier.padding(10.dp))
-                TextButton(
-                    onClick = {
-                        navController.navigate("login_page") {
-                            popUpTo(navController.graph.startDestinationId)
-                            launchSingleTop = true
-                        }
-                    }
-                ) {
-                    Text(text = "Iniciar sesión")
-                }
+                NavigateToLoginButton(navController)
 
                 Spacer(modifier = Modifier.height(20.dp))
             }
@@ -142,79 +127,7 @@ fun RegisterUser(navController: NavController) {
 }
 
 @Composable
-fun RegisterName() {
-    val keyboardController = LocalSoftwareKeyboardController.current
-    var text by rememberSaveable { mutableStateOf("") }
-
-    TextField(
-        value = text,
-        onValueChange = { text = it },
-        shape = RoundedCornerShape(topEnd = 12.dp, bottomStart = 12.dp),
-        label = {
-            Text(
-                text = "Nombre",
-                color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.labelMedium
-            )
-        },
-        placeholder = { Text(text = "Nombre") },
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Text,
-            imeAction = ImeAction.Done
-        ),
-        keyboardActions = KeyboardActions(
-            onDone = {
-                keyboardController?.hide()
-                // Más lógica es possible
-            }
-        ),
-        colors = TextFieldDefaults.colors(
-            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-            unfocusedIndicatorColor = MaterialTheme.colorScheme.primary
-        ),
-        singleLine = true,
-        modifier = Modifier.fillMaxWidth(0.8f)
-    )
-}
-
-@Composable
-fun RegisterSecondName() {
-    val keyboardController = LocalSoftwareKeyboardController.current
-    var text by rememberSaveable { mutableStateOf("") }
-
-    TextField(
-        value = text,
-        onValueChange = { text = it },
-        shape = RoundedCornerShape(topEnd = 12.dp, bottomStart = 12.dp),
-        label = {
-            Text(
-                text = "Apellido paterno",
-                color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.labelMedium
-            )
-        },
-        placeholder = { Text(text = "Apellido paterno") },
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Text,
-            imeAction = ImeAction.Done
-        ),
-        keyboardActions = KeyboardActions(
-            onDone = {
-                keyboardController?.hide()
-                // Más lógica es possible
-            }
-        ),
-        colors = TextFieldDefaults.colors(
-            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-            unfocusedIndicatorColor = MaterialTheme.colorScheme.primary
-        ),
-        singleLine = true,
-        modifier = Modifier.fillMaxWidth(0.8f)
-    )
-}
-
-@Composable
-fun RegisterEmail() {
+fun Registers(name: String) {
     var text: String by rememberSaveable { mutableStateOf("") }
 
     TextField(
@@ -223,12 +136,12 @@ fun RegisterEmail() {
         shape = RoundedCornerShape(topEnd = 12.dp, bottomStart = 12.dp),
         label = {
             Text(
-                "Correo electrónico",
+                text = name,
                 color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.labelMedium,
             )
         },
-        placeholder = { Text(text = "Correo electrónico") },
+        placeholder = { Text(text = name) },
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Text,
             imeAction = ImeAction.Done
@@ -268,7 +181,6 @@ fun RegisterPasswordField(
         ),
         keyboardActions = KeyboardActions(
             onDone = {
-                //LocalSoftwareKeyboardController.current?.hide()
                 // Lógica adicional aquí si es necesaria
             }
         ),
@@ -315,4 +227,18 @@ fun RegisterPasswordConfirm() {
         passwordHidden = confirmPasswordHidden,
         onPasswordVisibilityToggle = { confirmPasswordHidden = !confirmPasswordHidden }
     )
+}
+
+@Composable
+fun NavigateToLoginButton(navController: NavController) {
+    TextButton(
+        onClick = {
+            navController.navigate("login") {
+                popUpTo(navController.graph.startDestinationId)
+                launchSingleTop = true
+            }
+        }
+    ) {
+        Text(text = "Iniciar sesión")
+    }
 }
