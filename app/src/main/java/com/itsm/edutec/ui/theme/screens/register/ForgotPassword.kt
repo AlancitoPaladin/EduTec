@@ -105,7 +105,7 @@ fun ForgotPassword(navController: NavController) {
                             offset = offset,
                             blurRadius = 0.01f
                         ),
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.W300
                     )
                 )
 

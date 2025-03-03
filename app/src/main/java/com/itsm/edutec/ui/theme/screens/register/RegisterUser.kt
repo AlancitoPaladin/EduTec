@@ -9,14 +9,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -27,6 +31,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -99,13 +104,15 @@ fun RegisterUser(navController: NavController) {
                     Spacer(modifier = Modifier.height(3.dp))
                 }
 
-                Spacer(modifier = Modifier.height(3.dp))
                 RegisterPassword()
 
                 Spacer(modifier = Modifier.height(3.dp))
                 RegisterPasswordConfirm()
 
-                val gradientColor = listOf(Color(0xFF187E1E), Color(0xFF197E19))
+                Spacer(modifier = Modifier.height(3.dp))
+                MinimalDropdownMenu()
+
+                val gradientColor = listOf(Color(0xFF00CCFF), Color(0xFF57CBFD))
                 val cornerRadius = 32.dp
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -226,6 +233,59 @@ fun RegisterPasswordConfirm() {
         onValueChange = { confirmPassword = it },
         passwordHidden = confirmPasswordHidden,
         onPasswordVisibilityToggle = { confirmPasswordHidden = !confirmPasswordHidden }
+    )
+}
+
+@Composable
+fun MinimalDropdownMenu() {
+    var value by rememberSaveable { mutableStateOf("") }
+    var expanded by remember { mutableStateOf(false) }
+
+    TextField(
+        value = value,
+        onValueChange = { value = it },
+        label = {
+            Text(
+                "Selecciona tu rol",
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.labelMedium
+            )
+        },
+        shape = RoundedCornerShape(topEnd = 12.dp, bottomStart = 12.dp),
+        colors = TextFieldDefaults.colors(
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+            unfocusedIndicatorColor = MaterialTheme.colorScheme.primary
+        ),
+        trailingIcon = {
+            IconButton(onClick = { expanded = !expanded }) {
+                Icon(
+                    imageVector = Icons.Default.ArrowDropDown,
+                    contentDescription = "Dropdown Menu",
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                DropdownMenuItem(
+                    text = { Text("Alumno") },
+                    onClick = {
+                        value = "Alumno"
+                        expanded = false
+                    }
+                )
+                DropdownMenuItem(
+                    text = { Text("Maestro") },
+                    onClick = {
+                        value = "Maestro"
+                        expanded = false
+                    }
+                )
+            }
+        },
+        modifier = Modifier.fillMaxWidth(0.8f)
     )
 }
 
