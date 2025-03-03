@@ -38,7 +38,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -101,7 +103,7 @@ fun ForgotPassword(navController: NavController) {
                         shadow = Shadow(
                             color = MaterialTheme.colorScheme.primary,
                             offset = offset,
-                            blurRadius = 0.1f
+                            blurRadius = 0.01f
                         ),
                         fontWeight = FontWeight.Medium
                     )
@@ -180,11 +182,18 @@ fun FadeImageFromCenterToBottom(navController: NavController) {
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxSize()
+                .graphicsLayer {
+                    alpha = 0.99f
+                    compositingStrategy = CompositingStrategy.Offscreen
+                }
                 .drawWithContent {
                     drawContent()
                     val fadeBrush = Brush.verticalGradient(
-                        colors = listOf(Color.Black, Color.Transparent),
-                        startY = size.height / 2,
+                        colors = listOf(
+                            Color.Black,
+                            Color.Transparent
+                        ),
+                        startY = size.height / 30,
                         endY = size.height
                     )
                     drawRect(brush = fadeBrush, blendMode = BlendMode.DstIn)
