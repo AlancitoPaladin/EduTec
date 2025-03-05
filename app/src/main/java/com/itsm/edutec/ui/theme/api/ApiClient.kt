@@ -15,10 +15,9 @@ object RetrofitClient {
     private const val BASE_URL = "http://10.0.2.2:5000"
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY // Puedes cambiar a BASIC, HEADERS o BODY según tus necesidades
+        level = HttpLoggingInterceptor.Level.BODY
     }
 
-    // Crear el cliente de OkHttp con el interceptor
     private val httpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
         .build()
@@ -26,7 +25,7 @@ object RetrofitClient {
     val retrofit: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .client(httpClient)  // Añadir el cliente con los logs
+            .client(httpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
