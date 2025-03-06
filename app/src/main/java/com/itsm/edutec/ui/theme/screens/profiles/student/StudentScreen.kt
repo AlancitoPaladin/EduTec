@@ -7,15 +7,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Apps
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.Apps
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.filled.KeyboardDoubleArrowRight
+import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,17 +19,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,6 +31,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.itsm.edutec.ui.theme.components.BottomBar
 
 @Preview(showBackground = true)
 @Composable
@@ -87,7 +79,7 @@ fun StudentScreen() {
                         )
                     ) {
                         Icon(
-                            imageVector = Icons.Filled.Menu,
+                            imageVector = Icons.Rounded.Notifications,
                             contentDescription = "Localized description"
                         )
                     }
@@ -101,60 +93,85 @@ fun StudentScreen() {
         Column(
             modifier = Modifier
                 .padding(innerPadding),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
-            Box(
-                modifier = Modifier
-                    .padding(2.dp)
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                CoursesCard()
-            }
-            // Column
+            CourseCard()
+
+            CourseCategory()
+
+            CourseCard()
+
+            CourseCategory()
+
+            CourseCard()
         }
     }
 }
 
 @Composable
-fun CoursesCard() {
-    ElevatedCard(
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 6.dp
-        ),
+fun CourseCard() {
+    Box(
         modifier = Modifier
-            .size(width = 360.dp, height = 150.dp)
+            .padding(8.dp)
+            .fillMaxWidth(),
+        contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = "Elevated",
-            modifier = Modifier
-                .padding(16.dp),
-            textAlign = TextAlign.Center,
-        )
+        LazyRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            items(4) {
+                ElevatedCard(
+                    onClick = { /* Ir al curso */ },
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.onSecondaryContainer,
+
+                        ),
+                    elevation = CardDefaults.cardElevation(
+                        defaultElevation = 6.dp
+                    ),
+                    modifier = Modifier
+                        .size(width = 360.dp, height = 150.dp)
+                ) {
+                    Text(
+                        text = "Elevated",
+                        modifier = Modifier
+                            .padding(16.dp),
+                        textAlign = TextAlign.Center,
+                        color = Color.White
+                    )
+                }
+            }
+        }
     }
 }
 
-@Composable
-fun BottomBar() {
-    var selectedItem by remember { mutableIntStateOf(0) }
-    val items = listOf("Principal", "Novedades", "Favoritos")
-    val selectedIcons = listOf(Icons.Filled.Person, Icons.Filled.Apps, Icons.Filled.Star)
-    val unselectedIcons =
-        listOf(Icons.Outlined.Person, Icons.Outlined.Apps, Icons.Outlined.Star)
 
-    NavigationBar {
-        items.forEachIndexed { index, item ->
-            NavigationBarItem(
-                icon = {
-                    Icon(
-                        if (selectedItem == index) selectedIcons[index] else unselectedIcons[index],
-                        contentDescription = item
-                    )
-                },
-                label = { Text(item) },
-                selected = selectedItem == index,
-                onClick = { selectedItem = index }
-            )
+@Composable
+fun CourseCategory() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth(),
+        contentAlignment = Alignment.CenterStart
+    ) {
+        Text(
+            text = "Category 1",
+            fontSize = 24.sp,
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.padding(horizontal = 16.dp),
+            color = Color.DarkGray
+        )
+
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.CenterEnd
+        ) {
+            IconButton(onClick = {}) {
+                Icon(
+                    imageVector = Icons.Filled.KeyboardDoubleArrowRight,
+                    contentDescription = "Volver"
+                )
+            }
         }
     }
 }
