@@ -7,6 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.itsm.edutec.ui.theme.screens.profiles.student.StudentScreen
+import com.itsm.edutec.ui.theme.screens.profiles.teacher.TeacherScreen
 import com.itsm.edutec.ui.theme.screens.register.ForgotPassword
 import com.itsm.edutec.ui.theme.screens.register.LoginScreen
 import com.itsm.edutec.ui.theme.screens.register.RegisterUser
@@ -21,7 +23,9 @@ fun AppNavigation(paddingValues: PaddingValues) {
         modifier = Modifier.padding(paddingValues)
     ) {
         composable("login") { LoginScreen(navController) }
-        composable("register_user") {RegisterUser(navController)}
+        composable("register_user") { RegisterUser(navController) }
         composable("forgot_password") { ForgotPassword(navController) }
+        composable("teacher_screen") { TeacherScreen() }
+        composable("student_screen") { StudentScreen() }
     }
 }
