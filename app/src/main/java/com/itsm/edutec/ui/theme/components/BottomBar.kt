@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun BottomBar() {
@@ -34,7 +35,7 @@ fun BottomBar() {
                         contentDescription = item
                     )
                 },
-                label = { Text(item) },
+                label = { Text(item, fontSize = 12.sp) },
                 selected = selectedItem == index,
                 onClick = { selectedItem = index }
             )
