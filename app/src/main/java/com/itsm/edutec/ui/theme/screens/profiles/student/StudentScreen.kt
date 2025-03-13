@@ -76,6 +76,7 @@ fun StudentScreen(courseViewModel: CourseViewModel = viewModel()) {
     val thirdSection = courses.takeLast(4)
 
     Scaffold(
+        containerColor = if (isDarkTheme) Color(0xFF262626) else Color.White,
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -88,7 +89,8 @@ fun StudentScreen(courseViewModel: CourseViewModel = viewModel()) {
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.primary
                     )
                 },
                 navigationIcon = {
@@ -124,7 +126,6 @@ fun StudentScreen(courseViewModel: CourseViewModel = viewModel()) {
         },
         bottomBar = { BottomBar() }
     ) { innerPadding ->
-        Spacer(modifier = Modifier.height(20.dp))
         LazyColumn(
             modifier = Modifier
                 .padding(innerPadding)
@@ -227,13 +228,14 @@ fun VariousCoursesCard(courses: List<CoursePreview>) {
             .fillMaxWidth()
             .padding(vertical = 2.dp)
     ) {
-        repeat(4) {
+        val rows = courses.chunked(3)
+        rows.forEach { rowCourses ->
             Column(modifier = Modifier.padding(bottom = 12.dp)) {
                 LazyRow(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
-                    itemsIndexed(courses) { index, course ->
+                    itemsIndexed(rowCourses) { index, course ->
                         ElevatedCard(
                             onClick = { /* Ir al curso */ },
                             colors = CardDefaults.cardColors(
@@ -253,7 +255,7 @@ fun VariousCoursesCard(courses: List<CoursePreview>) {
                                 Box(
                                     modifier = Modifier
                                         .width(75.dp)
-                                        .height(75.dp),
+                                        .height(85.dp),
                                     contentAlignment = Alignment.Center
                                 ) {
                                     MyGlideImageWithView(
@@ -261,7 +263,6 @@ fun VariousCoursesCard(courses: List<CoursePreview>) {
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .fillMaxHeight()
-                                            .clip(RoundedCornerShape(32.dp))
                                     )
                                 }
 
@@ -276,7 +277,9 @@ fun VariousCoursesCard(courses: List<CoursePreview>) {
                                         Text(
                                             text = course.course,
                                             color = Color.White,
-                                            fontSize = 12.sp
+                                            fontSize = 12.sp,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis
                                         )
 
                                         Text(
@@ -317,13 +320,14 @@ fun CourseCategory(categoryName: String) {
             text = categoryName,
             fontSize = 22.sp,
             style = MaterialTheme.typography.titleLarge,
-            color = Color.DarkGray
+            color = MaterialTheme.colorScheme.primary
         )
 
         IconButton(onClick = { /* Navegar a categoría */ }) {
             Icon(
                 imageVector = Icons.Filled.KeyboardDoubleArrowRight,
-                contentDescription = "Ver más"
+                contentDescription = "Ver más",
+                tint = MaterialTheme.colorScheme.primary
             )
         }
     }
