@@ -18,7 +18,7 @@ class CourseViewModel : ViewModel() {
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> get() = _error
 
-    fun fetchCourses(page: Int = 1, perPage: Int = 10) {
+    fun fetchCourses(page: Int = 1, perPage: Int = 20) {
         viewModelScope.launch {
             _isLoading.value = true
             _error.value = null
@@ -26,7 +26,7 @@ class CourseViewModel : ViewModel() {
                 val response = apiService.getCourses(page, perPage)
                 if (response.isSuccessful) {
                     response.body()?.let {
-                        _courses.value = it.courses  // Ya tienes una lista de CoursePreview
+                        _courses.value = it.courses
                     }
                 } else {
                     _error.value = "Error al obtener los cursos"

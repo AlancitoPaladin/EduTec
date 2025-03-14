@@ -20,7 +20,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardDoubleArrowRight
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -37,6 +36,7 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -71,9 +71,9 @@ fun StudentScreen(courseViewModel: CourseViewModel = viewModel()) {
         courseViewModel.fetchCourses()
     }
 
-    val firstSection = courses.take(4)
-    val secondSection = courses.drop(4).take(12)
-    val thirdSection = courses.takeLast(4)
+    val (firstSection, secondSection, thirdSection) = remember(courses) {
+        Triple(courses.take(4), courses.drop(4).take(12), courses.takeLast(4))
+    }
 
     Scaffold(
         containerColor = if (isDarkTheme) Color(0xFF262626) else Color.White,
@@ -205,13 +205,9 @@ fun CourseCard(courses: List<CoursePreview>) {
                                 .padding(8.dp)
                         )
 
-                        Spacer(modifier = Modifier.width(8.dp))
-
-                        Icon(
-                            imageVector = Icons.Filled.Star,
-                            contentDescription = "Star",
-                            tint = Color.Yellow,
-                            modifier = Modifier.size(16.dp)
+                        Text(
+                            text = "★",
+                            color = Color.Yellow
                         )
                     }
                 }
@@ -228,7 +224,7 @@ fun VariousCoursesCard(courses: List<CoursePreview>) {
             .fillMaxWidth()
             .padding(vertical = 2.dp)
     ) {
-        val rows = courses.chunked(3)
+        val rows = courses.chunked(4)
         rows.forEach { rowCourses ->
             Column(modifier = Modifier.padding(bottom = 12.dp)) {
                 LazyRow(

@@ -16,7 +16,7 @@ interface ApiService {
     @GET("courses")
     suspend fun getCourses(
         @Query("page") page: Int = 1,
-        @Query("per_page") perPage: Int = 10
+        @Query("per_page") perPage: Int = 20
     ): Response<CourseResponse>
 
     @GET("course/{id}")
