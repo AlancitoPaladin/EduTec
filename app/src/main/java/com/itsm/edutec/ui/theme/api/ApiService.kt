@@ -19,7 +19,7 @@ interface ApiService {
         @Query("per_page") perPage: Int = 20
     ): Response<CourseResponse>
 
-    @GET("course/{id}")
+    @POST("course/{id}")
     suspend fun getCourseDetails(
         @Path("id") id: String
     ): Response<Course>

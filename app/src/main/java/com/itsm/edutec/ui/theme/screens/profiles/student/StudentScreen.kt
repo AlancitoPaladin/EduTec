@@ -43,26 +43,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.itsm.edutec.ui.theme.api.CoursePreview
 import com.itsm.edutec.ui.theme.components.BottomBar
 import com.itsm.edutec.ui.theme.components.MyGlideImageWithView
 import com.itsm.edutec.ui.theme.models.CourseViewModel
 
-@Preview
-@Composable
-fun MyPreview() {
-    MaterialTheme {
-        StudentScreen()
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StudentScreen(courseViewModel: CourseViewModel = viewModel()) {
+fun StudentScreen(navController: NavController, courseViewModel: CourseViewModel = viewModel()) {
     val isDarkTheme = isSystemInDarkTheme()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val courses = courseViewModel.courses.collectAsState().value
@@ -134,27 +127,27 @@ fun StudentScreen(courseViewModel: CourseViewModel = viewModel()) {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             item { CourseCategory(categoryName = "Novedades") }
-            item { CourseCard(courses = firstSection) }
+            item { CourseCard(courses = firstSection, navController) }
 
             item { CourseCategory(categoryName = "Cursos populares") }
-            item { VariousCoursesCard(courses = secondSection) }
+            item { VariousCoursesCard(courses = secondSection, navController) }
 
             item { CourseCategory(categoryName = "Recomendados para ti") }
-            item { CourseCard(courses = thirdSection) }
+            item { CourseCard(courses = thirdSection, navController) }
         }
     }
 }
 
 
 @Composable
-fun CourseCard(courses: List<CoursePreview>) {
+fun CourseCard(courses: List<CoursePreview>, navController: NavController) {
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         itemsIndexed(courses) { index, course ->
             ElevatedCard(
-                onClick = { /* Ir al curso */ },
+                onClick = { navController.navigate("courseDetails/${course.id}") },
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.onSecondaryContainer,
                 ),
@@ -176,6 +169,7 @@ fun CourseCard(courses: List<CoursePreview>) {
                             .fillMaxHeight(0.85f)
                             .clip(RoundedCornerShape(32.dp))
                     )
+
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -218,7 +212,7 @@ fun CourseCard(courses: List<CoursePreview>) {
 
 
 @Composable
-fun VariousCoursesCard(courses: List<CoursePreview>) {
+fun VariousCoursesCard(courses: List<CoursePreview>, navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -233,7 +227,7 @@ fun VariousCoursesCard(courses: List<CoursePreview>) {
                 ) {
                     itemsIndexed(rowCourses) { index, course ->
                         ElevatedCard(
-                            onClick = { /* Ir al curso */ },
+                            onClick = { navController.navigate("courseDetails/${course.id}") },
                             colors = CardDefaults.cardColors(
                                 containerColor = MaterialTheme.colorScheme.onSecondaryContainer
                             ),
