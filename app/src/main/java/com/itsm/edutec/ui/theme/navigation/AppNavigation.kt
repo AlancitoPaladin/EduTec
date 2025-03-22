@@ -4,11 +4,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.itsm.edutec.ui.theme.screens.profiles.student.CourseScreen
 import com.itsm.edutec.ui.theme.screens.profiles.student.StudentScreen
 import com.itsm.edutec.ui.theme.screens.profiles.teacher.TeacherScreen
@@ -30,12 +28,9 @@ fun AppNavigation(paddingValues: PaddingValues) {
         composable("forgot_password") { ForgotPassword(navController) }
         composable("teacher_screen") { TeacherScreen() }
         composable("student_screen") { StudentScreen(navController) }
-        composable(
-            route = "courseDetails/{courseId}",
-            arguments = listOf(navArgument("courseId") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val courseId = backStackEntry.arguments?.getString("courseId") ?: ""
-            CourseScreen(id = courseId, navController = navController)
+        composable("courseDetails/{courseId}") { backStackEntry ->
+            val courseId = backStackEntry.arguments?.getString("courseId") ?: return@composable
+            CourseScreen(courseId, navController)
         }
     }
 }

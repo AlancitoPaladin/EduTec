@@ -88,7 +88,7 @@ fun StudentScreen(navController: NavController, courseViewModel: CourseViewModel
                 },
                 navigationIcon = {
                     IconButton(
-                        onClick = { /* Acción de navegación */ },
+                        onClick = { navController.popBackStack() },
                         colors = IconButtonDefaults.iconButtonColors(
                             contentColor = if (isDarkTheme) Color.White else Color.Cyan
                         ),

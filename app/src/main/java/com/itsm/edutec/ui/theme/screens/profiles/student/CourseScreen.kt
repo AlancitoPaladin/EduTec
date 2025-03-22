@@ -69,7 +69,7 @@ fun CourseScreen(id: String, navController: NavController, viewModel: CourseDeta
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { /* Handle back navigation */ }) {
+                    IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back"
@@ -112,7 +112,7 @@ fun CourseScreen(id: String, navController: NavController, viewModel: CourseDeta
             }
 
             course != null -> {
-                CourseContent(course!!, Modifier.padding(innerPadding))
+                CourseContent(course!!)
             }
 
             else -> {
@@ -130,7 +130,7 @@ fun CourseScreen(id: String, navController: NavController, viewModel: CourseDeta
 }
 
 @Composable
-fun CourseContent(course: Course, modifier: Modifier = Modifier) {
+fun CourseContent(course: Course) {
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -153,15 +153,20 @@ fun CourseContent(course: Course, modifier: Modifier = Modifier) {
             style = MaterialTheme.typography.titleLarge
         )
 
-
-        MyGlideImageWithView(
-            imageUrl = course.image,
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.85f)
-                .clip(RoundedCornerShape(32.dp))
-        )
-
+                .padding(20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            MyGlideImageWithView(
+                imageUrl = course.image,
+                modifier = Modifier
+                    .fillMaxWidth(0.9f)
+                    .fillMaxHeight(0.35f)
+                    .clip(RoundedCornerShape(16.dp))
+            )
+        }
 
         Column(
             modifier = Modifier
@@ -182,8 +187,8 @@ fun CourseContent(course: Course, modifier: Modifier = Modifier) {
                     
                     Nivel: ${course.level}
                     
-                    Inicio: ${course.start} " " ${course.year} 
-                    Fin: ${course.end} " " ${course.year}
+                    Inicio: ${course.start} - ${course.year} 
+                    Fin: ${course.end} - ${course.year}
                     
                 """.trimIndent(),
                 lineHeight = 18.sp
@@ -217,8 +222,8 @@ fun CourseContent(course: Course, modifier: Modifier = Modifier) {
 fun BuyCourse() {
     ElevatedButton(
         onClick = {},
-        colors = ButtonDefaults.elevatedButtonColors(Color.Black)
+        colors = ButtonDefaults.elevatedButtonColors(Color.White)
     ) {
-        Text("Inscribirme", color = Color.White)
+        Text("Inscribirme", color = Color.Black)
     }
 }

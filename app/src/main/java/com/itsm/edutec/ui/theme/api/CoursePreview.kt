@@ -3,7 +3,7 @@ package com.itsm.edutec.ui.theme.api
 import com.google.gson.annotations.SerializedName
 
 data class CoursePreview (
-    @SerializedName("id")
+    @SerializedName("_id")
     val id: String,
 
     @SerializedName("course")

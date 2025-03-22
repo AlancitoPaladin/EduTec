@@ -20,7 +20,5 @@ interface ApiService {
     ): Response<CourseResponse>
 
     @POST("course/{id}")
-    suspend fun getCourseDetails(
-        @Path("id") id: String
-    ): Response<Course>
+    suspend fun getCourseDetails(@Path("id") courseId: String): Response<Course>
 }
