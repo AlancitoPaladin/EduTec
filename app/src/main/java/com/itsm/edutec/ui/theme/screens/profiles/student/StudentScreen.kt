@@ -32,7 +32,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -57,7 +56,6 @@ import com.itsm.edutec.ui.theme.models.CourseViewModel
 @Composable
 fun StudentScreen(navController: NavController, courseViewModel: CourseViewModel = viewModel()) {
     val isDarkTheme = isSystemInDarkTheme()
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val courses = courseViewModel.courses.collectAsState().value
 
     LaunchedEffect(Unit) {
@@ -114,7 +112,6 @@ fun StudentScreen(navController: NavController, courseViewModel: CourseViewModel
                         )
                     }
                 },
-                scrollBehavior = scrollBehavior,
             )
         },
         bottomBar = { BottomBar() }
