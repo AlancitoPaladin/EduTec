@@ -3,9 +3,11 @@ package com.itsm.edutec.ui.theme.screens.profiles.student
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -103,6 +105,7 @@ fun CourseScreen(id: String, navController: NavController, viewModel: CourseDeta
             }
 
             course != null -> {
+                Spacer(modifier = Modifier.height(16.dp))
                 CourseContent(course!!)
             }
 
@@ -122,6 +125,8 @@ fun CourseScreen(id: String, navController: NavController, viewModel: CourseDeta
 
 @Composable
 fun CourseContent(course: Course) {
+    Spacer(modifier = Modifier.height(16.dp))
+
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -204,15 +209,17 @@ fun CourseContent(course: Course) {
 
 
         }
-        BuyCourse()
+        EnrollCourse()
     }
 }
 
 
 @Composable
-fun BuyCourse() {
+fun EnrollCourse() {
     ElevatedButton(
-        onClick = {},
+        onClick = {
+            /* Hacer la lógica para poder inscirbirse a la app*/
+        },
         colors = ButtonDefaults.elevatedButtonColors(Color.White)
     ) {
         Text("Inscribirme", color = Color.Black)

@@ -19,12 +19,12 @@ class CourseDetails : ViewModel() {
 
     fun fetchCourseDetails(courseId: String?) {
         if (courseId.isNullOrEmpty()) {
-            _errorMessage.postValue("Error: El ID del curso es inválido")  // postValue para evitar error de hilo
+            _errorMessage.postValue("Error: El ID del curso es inválido")
             return
         }
 
         viewModelScope.launch {
-            _isLoading.postValue(true)  // postValue para manejar hilos correctamente
+            _isLoading.postValue(true)
             try {
                 val response = apiService.getCourseDetails(courseId)
                 if (response.isSuccessful) {
