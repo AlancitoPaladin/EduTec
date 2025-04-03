@@ -16,8 +16,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             enableEdgeToEdge()
             EduTecTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
-                    AppNavigation(paddingValues)
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    AppNavigation(innerPadding)
                 }
             }
         }

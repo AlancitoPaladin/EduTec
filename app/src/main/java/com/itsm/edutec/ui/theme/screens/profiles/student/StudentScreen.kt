@@ -20,7 +20,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardDoubleArrowRight
-import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ElevatedCard
@@ -95,20 +94,6 @@ fun StudentScreen(navController: NavController, courseViewModel: CourseViewModel
                             modifier = Modifier.size(24.dp),
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Volver",
-                        )
-                    }
-                },
-                actions = {
-                    IconButton(
-                        onClick = { /* Acción de notificación */ },
-                        colors = IconButtonDefaults.iconButtonColors(
-                            contentColor = if (isDarkTheme) Color.White else Color.Cyan
-                        )
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(24.dp),
-                            imageVector = Icons.Rounded.Notifications,
-                            contentDescription = "Notificaciones"
                         )
                     }
                 },
