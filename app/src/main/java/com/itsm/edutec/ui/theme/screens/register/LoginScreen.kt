@@ -49,11 +49,15 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.itsm.edutec.R
 import com.itsm.edutec.ui.theme.components.LoginState
 import com.itsm.edutec.ui.theme.models.LoginViewModel
+import com.itsm.edutec.ui.theme.models.LoginViewModelFactory
+import com.itsm.edutec.ui.theme.session.SessionManager
 
 @Composable
 fun LoginScreen(
     navHostController: NavHostController,
-    loginViewModel: LoginViewModel = viewModel()
+    loginViewModel: LoginViewModel = viewModel(
+        factory = LoginViewModelFactory(sessionManager = SessionManager(LocalContext.current))
+    )
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }

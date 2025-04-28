@@ -17,6 +17,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -66,7 +67,8 @@ fun CourseScreen(id: String, navController: NavController, viewModel: CourseDeta
                     Text(
                         "Curso",
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
+                        style = MaterialTheme.typography.headlineSmall
                     )
                 },
                 navigationIcon = {
@@ -81,42 +83,33 @@ fun CourseScreen(id: String, navController: NavController, viewModel: CourseDeta
             )
         },
     ) { innerPadding ->
-        when {
-            isLoading -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
+            when {
+                isLoading -> {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
-            }
 
-            errorMessage != null -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(text = "Error: $errorMessage", color = Color.Red)
+                errorMessage != null -> {
+                    Text(
+                        text = "Error: $errorMessage",
+                        color = Color.Red,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
                 }
-            }
 
-            course != null -> {
-                Spacer(modifier = Modifier.height(16.dp))
-                CourseContent(course!!)
-            }
+                course != null -> {
+                    CourseContent(course!!)
+                }
 
-            else -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(text = "No course details available.")
+                else -> {
+                    Text(
+                        text = "No course details available.",
+                        modifier = Modifier.align(Alignment.Center)
+                    )
                 }
             }
         }
@@ -139,7 +132,12 @@ fun CourseContent(course: Course) {
                 .fillMaxWidth(),
             contentAlignment = Alignment.TopEnd
         ) {
-            Text(text = "${course.stars}")
+            Text(
+                text = "${course.stars} ⭐",
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.align(Alignment.TopEnd)
+            )
+
         }
 
         Text(
@@ -170,6 +168,8 @@ fun CourseContent(course: Course) {
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
 
+            HorizontalDivider(thickness = 2.dp)
+
             Text(
                 text = course.description,
                 maxLines = 3,
@@ -190,7 +190,7 @@ fun CourseContent(course: Course) {
                 lineHeight = 18.sp
             )
 
-
+            HorizontalDivider(thickness = 2.dp)
 
             Text(
                 text = "Contacto",
@@ -209,6 +209,9 @@ fun CourseContent(course: Course) {
 
 
         }
+
+        HorizontalDivider(thickness = 3.dp)
+
         EnrollCourse()
     }
 }
