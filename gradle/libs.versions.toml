@@ -1,7 +1,7 @@
 [versions]
-agp = "8.9.1"
+agp = "8.9.2"
 kotlin = "2.0.21"
-coreKtx = "1.15.0"
+coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -15,7 +15,7 @@ retrofit = "2.11.0"
 okhttp = "4.12.0"
 gson = "2.10.0"
 glide = "4.15.0"
-runtimeLivedata = "1.7.8"
+runtimeLivedata = "1.8.0"
 androidx-datastore = "1.1.0"
 kotlinx-coroutines = "1.10.2"
 

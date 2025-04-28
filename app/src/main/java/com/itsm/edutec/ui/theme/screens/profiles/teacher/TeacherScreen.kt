@@ -42,7 +42,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
@@ -51,12 +50,6 @@ import com.itsm.edutec.ui.theme.models.TeacherViewModel
 import com.itsm.edutec.ui.theme.models.TeacherViewModelFactory
 import com.itsm.edutec.ui.theme.session.SessionManager
 import kotlinx.coroutines.launch
-
-@Preview(showBackground = true)
-@Composable
-fun MyTeacherPreview() {
-    TeacherScreen()
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
