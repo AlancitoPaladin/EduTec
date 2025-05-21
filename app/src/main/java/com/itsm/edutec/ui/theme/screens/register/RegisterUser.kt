@@ -1,5 +1,6 @@
 package com.itsm.edutec.ui.theme.screens.register
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -46,15 +49,44 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.itsm.edutec.R
+import com.itsm.edutec.ui.theme.api.ApiService
 import com.itsm.edutec.ui.theme.components.GradientButton
 import com.itsm.edutec.ui.theme.navigation.BackToLoginButton
 
 
 @Composable
-fun RegisterUser(navController: NavController) {
-    val attributes = listOf("Nombre", "Apellidos", "Correo electrónico")
+fun RegisterUser(navController: NavController, apiService: ApiService) {
+    val factory = remember { RegisterViewModelFactory(apiService) }
+    val viewModel: RegisterViewModel = viewModel(factory = factory)
+
+    var name by rememberSaveable { mutableStateOf("") }
+    var lastName by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
+    var confirmPassword by rememberSaveable { mutableStateOf("") }
+    var role by rememberSaveable { mutableStateOf("") }
+    val context = LocalContext.current
+
+    val uiState = viewModel.uiState
+
+    LaunchedEffect(uiState) {
+        when (uiState) {
+            is UiState.Success -> {
+                Toast.makeText(context, uiState.message, Toast.LENGTH_LONG).show()
+                navController.navigate("login")
+            }
+
+            is UiState.Error -> {
+                Toast.makeText(context, uiState.message, Toast.LENGTH_LONG).show()
+            }
+
+            else -> Unit
+        }
+    }
+
 
     Box(
         modifier = Modifier
@@ -109,28 +141,75 @@ fun RegisterUser(navController: NavController) {
                     color = MaterialTheme.colorScheme.primary
                 )
 
-                attributes.forEach { fieldName ->
-                    Registers(fieldName)
-                    Spacer(modifier = Modifier.height(3.dp))
-                }
+                Registers("Nombre", name) { name = it }
+                Spacer(modifier = Modifier.height(3.dp))
 
-                RegisterPassword()
+                Registers("Apellidos", lastName) { lastName = it }
                 Spacer(modifier = Modifier.height(3.dp))
-                RegisterPasswordConfirm()
+
+                Registers("Correo electrónico", email) { email = it }
                 Spacer(modifier = Modifier.height(3.dp))
-                RoleMenu()
+
+                RegisterPasswordField(
+                    "Ingresa la contraseña",
+                    password,
+                    { password = it },
+                    passwordHidden = true
+                ) {
+                }
+                Spacer(modifier = Modifier.height(3.dp))
+
+                RegisterPasswordField(
+                    "Confirma la contraseña",
+                    confirmPassword,
+                    { confirmPassword = it },
+                    passwordHidden = true
+                ) {
+                }
+                Spacer(modifier = Modifier.height(3.dp))
+
+                RoleMenu(role = role) { role = it }
+
+                Spacer(modifier = Modifier.height(10.dp))
 
                 val gradientColor = listOf(Color(0xFF00CCFF), Color(0xFF57CBFD))
                 val cornerRadius = 32.dp
 
                 Spacer(modifier = Modifier.height(10.dp))
 
+                val isFormValid = name.isNotBlank() &&
+                        lastName.isNotBlank() &&
+                        email.isNotBlank() &&
+                        password == confirmPassword &&
+                        password.length >= 6 &&
+                        role.isNotBlank()
+
+
                 GradientButton(
                     gradientColors = gradientColor,
                     cornerRadius = cornerRadius,
                     nameButton = "Crear cuenta",
-                    roundedCornerShape = RoundedCornerShape(topStart = 10.dp, bottomEnd = 10.dp)
+                    roundedCornerShape = RoundedCornerShape(topStart = 10.dp, bottomEnd = 10.dp),
+                    onClick = {
+                        if (isFormValid) {
+                            val registerRequest = RegisterRequest(
+                                name = name,
+                                lastName = lastName,
+                                email = email,
+                                password = password,
+                                role = role
+                            )
+                            viewModel.registerUser(registerRequest)
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "Por favor, completa todos los campos correctamente.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
                 )
+
             }
         }
     }
@@ -138,12 +217,10 @@ fun RegisterUser(navController: NavController) {
 
 
 @Composable
-fun Registers(name: String) {
-    var text: String by rememberSaveable { mutableStateOf("") }
-
+fun Registers(name: String, value: String, onValueChange: (String) -> Unit) {
     TextField(
-        value = text,
-        onValueChange = { text = it },
+        value = value,
+        onValueChange = onValueChange,
         shape = RoundedCornerShape(topEnd = 12.dp, bottomStart = 12.dp),
         label = {
             Text(
@@ -212,37 +289,9 @@ fun RegisterPasswordField(
     )
 }
 
-@Composable
-fun RegisterPassword() {
-    var password by rememberSaveable { mutableStateOf("") }
-    var passwordHidden by rememberSaveable { mutableStateOf(true) }
-
-    RegisterPasswordField(
-        label = "Ingresa la contraseña",
-        value = password,
-        onValueChange = { password = it },
-        passwordHidden = passwordHidden,
-        onPasswordVisibilityToggle = { passwordHidden = !passwordHidden }
-    )
-}
 
 @Composable
-fun RegisterPasswordConfirm() {
-    var confirmPassword by rememberSaveable { mutableStateOf("") }
-    var confirmPasswordHidden by rememberSaveable { mutableStateOf(true) }
-
-    RegisterPasswordField(
-        label = "Confirma la contraseña",
-        value = confirmPassword,
-        onValueChange = { confirmPassword = it },
-        passwordHidden = confirmPasswordHidden,
-        onPasswordVisibilityToggle = { confirmPasswordHidden = !confirmPasswordHidden }
-    )
-}
-
-@Composable
-fun RoleMenu() {
-    var value by rememberSaveable { mutableStateOf("") }
+fun RoleMenu(role: String, onRoleSelected: (String) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
     Box(
@@ -251,8 +300,8 @@ fun RoleMenu() {
             .clickable { expanded = true }
     ) {
         TextField(
-            value = value,
-            onValueChange = { },
+            value = role,
+            onValueChange = {},
             label = {
                 Text(
                     "Selecciona tu rol",
@@ -284,14 +333,14 @@ fun RoleMenu() {
         DropdownMenuItem(
             text = { Text("Alumno") },
             onClick = {
-                value = "Alumno"
+                onRoleSelected("Alumno")
                 expanded = false
             }
         )
         DropdownMenuItem(
             text = { Text("Maestro") },
             onClick = {
-                value = "Maestro"
+                onRoleSelected("Maestro")
                 expanded = false
             }
         )

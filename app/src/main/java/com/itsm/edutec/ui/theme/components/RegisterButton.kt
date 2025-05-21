@@ -24,17 +24,16 @@ fun GradientButton(
     gradientColors: List<Color>,
     cornerRadius: Dp,
     nameButton: String,
-    roundedCornerShape: RoundedCornerShape
+    roundedCornerShape: RoundedCornerShape,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-
     Button(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(Color.Transparent)
             .padding(start = 32.dp, end = 32.dp),
-        onClick = {
-            // Lógica de envío de registro a la API
-        },
+        onClick = onClick,
         contentPadding = PaddingValues(),
         colors = ButtonDefaults.buttonColors(
             contentColor = Color.Transparent

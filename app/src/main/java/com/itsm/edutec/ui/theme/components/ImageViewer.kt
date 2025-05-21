@@ -11,12 +11,15 @@ fun MyGlideImageWithView(imageUrl: String, modifier: Modifier = Modifier) {
     AndroidView(
         factory = { context ->
             ImageView(context).apply {
-                Glide.with(context)
-                    .load(imageUrl)
-                    .placeholder(android.R.drawable.stat_sys_download)
-                    .error(android.R.drawable.stat_notify_error)
-                    .into(this)
+                scaleType = ImageView.ScaleType.CENTER_CROP
             }
+        },
+        update = { imageView ->
+            Glide.with(imageView.context)
+                .load(imageUrl)
+                .placeholder(android.R.drawable.stat_sys_download)
+                .error(android.R.drawable.stat_notify_error)
+                .into(imageView)
         },
         modifier = modifier
     )

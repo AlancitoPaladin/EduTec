@@ -22,6 +22,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardDoubleArrowRight
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -30,11 +31,13 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,13 +52,18 @@ import com.itsm.edutec.ui.theme.api.CoursePreview
 import com.itsm.edutec.ui.theme.components.BottomBar
 import com.itsm.edutec.ui.theme.components.MyGlideImageWithView
 import com.itsm.edutec.ui.theme.models.CourseViewModel
+import com.itsm.edutec.ui.theme.navigation.StudentTab
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StudentScreen(navController: NavController, courseViewModel: CourseViewModel = viewModel()) {
     val isDarkTheme = isSystemInDarkTheme()
-    val courses = courseViewModel.courses.collectAsState().value
+    val selectedTab = rememberSaveable { mutableStateOf(StudentTab.Principal) }
+
+    val courses by courseViewModel.courses.collectAsState()
+    val isLoading by courseViewModel.isLoading.collectAsState()
+    val error by courseViewModel.error.collectAsState()
 
     LaunchedEffect(Unit) {
         courseViewModel.fetchCourses()
@@ -69,10 +77,6 @@ fun StudentScreen(navController: NavController, courseViewModel: CourseViewModel
         containerColor = if (isDarkTheme) Color(0xFF262626) else Color.White,
         topBar = {
             CenterAlignedTopAppBar(
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                ),
                 title = {
                     Text(
                         text = "EduTec",
@@ -96,48 +100,100 @@ fun StudentScreen(navController: NavController, courseViewModel: CourseViewModel
                             contentDescription = "Volver",
                         )
                     }
-                },
+                }
             )
         },
-        bottomBar = { BottomBar() }
+        bottomBar = {
+            BottomBar(
+                selectedTab = selectedTab.value,
+                onTabSelected = { selectedTab.value = it }
+            )
+        }
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            item { CourseCategory(categoryName = "Novedades") }
-            item { CourseCard(courses = firstSection, navController) }
+        when (selectedTab.value) {
+            StudentTab.Principal -> {
+                Box(
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .fillMaxSize()
+                ) {
+                    when {
+                        isLoading -> {
+                            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                        }
 
-            item { CourseCategory(categoryName = "Cursos populares") }
-            item { VariousCoursesCard(courses = secondSection, navController) }
+                        error != null -> {
+                            Text(
+                                text = error ?: "Error desconocido",
+                                color = Color.Red,
+                                modifier = Modifier.align(Alignment.Center),
+                                textAlign = TextAlign.Center
+                            )
+                        }
 
-            item { CourseCategory(categoryName = "Recomendados para ti") }
-            item { CourseCard(courses = thirdSection, navController) }
+                        else -> {
+                            LazyColumn(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(horizontal = 16.dp),
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                item { CourseCategory(categoryName = "Novedades") }
+                                item {
+                                    CourseCard(courses = firstSection) { course ->
+                                        navController.navigate("courseDetails/${course.id}")
+                                    }
+                                }
+
+                                item { CourseCategory(categoryName = "Cursos populares") }
+                                item { VariousCoursesCard(courses = secondSection, navController) }
+
+                                item { CourseCategory(categoryName = "Recomendados para ti") }
+                                item {
+                                    CourseCard(courses = thirdSection) { course ->
+                                        navController.navigate("courseDetails/${course.id}")
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            StudentTab.Novedades -> {
+                News(navController = navController, padding = innerPadding)
+            }
+
+            StudentTab.MisCursos -> {
+                MyCourses(navController = navController, padding = innerPadding)
+            }
         }
     }
 }
 
 
 @Composable
-fun CourseCard(courses: List<CoursePreview>, navController: NavController) {
+fun CourseCard(
+    courses: List<CoursePreview>,
+    onClick: (CoursePreview) -> Unit
+) {
+    if (courses.isEmpty()) {
+        Text("No hay cursos disponibles por ahora.")
+        return
+    }
+
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        itemsIndexed(courses) { index, course ->
+        itemsIndexed(courses) { _, course ->
             ElevatedCard(
-                onClick = { navController.navigate("courseDetails/${course.id}") },
+                onClick = { onClick(course) },
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.onSecondaryContainer,
                 ),
-                elevation = CardDefaults.cardElevation(
-                    defaultElevation = 6.dp
-                ),
-                modifier = Modifier
-                    .size(width = 300.dp, height = 210.dp)
+                elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+                modifier = Modifier.size(width = 300.dp, height = 210.dp)
             ) {
                 Box(
                     modifier = Modifier
@@ -177,14 +233,10 @@ fun CourseCard(courses: List<CoursePreview>, navController: NavController) {
                             fontSize = 12.sp,
                             color = if (!isSystemInDarkTheme()) Color.Black else Color.White,
                             style = MaterialTheme.typography.bodyLarge,
-                            modifier = Modifier
-                                .padding(8.dp)
+                            modifier = Modifier.padding(8.dp)
                         )
 
-                        Text(
-                            text = "★",
-                            color = Color.Yellow
-                        )
+                        Text(text = "★", color = Color.Yellow)
                     }
                 }
             }

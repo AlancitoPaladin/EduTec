@@ -2,6 +2,9 @@ package com.itsm.edutec.ui.theme.api
 
 import com.itsm.edutec.ui.theme.components.LoginRequest
 import com.itsm.edutec.ui.theme.components.LoginResponse
+import com.itsm.edutec.ui.theme.models.UserRequest
+import com.itsm.edutec.ui.theme.screens.register.PasswordRecoveryRequest
+import com.itsm.edutec.ui.theme.screens.register.RegisterRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -19,6 +22,24 @@ interface ApiService {
         @Query("per_page") perPage: Int = 20
     ): Response<CourseResponse>
 
+    @GET("news")
+    suspend fun getNews(
+        @Query("page") page: Int = 1,
+        @Query("per_page") perPage: Int = 10
+    ): Response<CourseResponse>
+
     @POST("course/{id}")
     suspend fun getCourseDetails(@Path("id") courseId: String): Response<Course>
+
+    @POST("get_courses_by_student")
+    suspend fun getCoursesByStudent(@Body request: UserRequest): Response<List<CoursePreview>>
+
+    @POST("/add_course_student")
+    suspend fun enrollCourse(@Body request: EnrollRequest): Response<EnrollmentResponse>
+
+    @POST("/register")
+    suspend fun registerUser(@Body request: RegisterRequest): Response<Unit>
+
+    @POST("/reset_password")
+    suspend fun recoverPassword(@Body request: PasswordRecoveryRequest): Response<Unit>
 }

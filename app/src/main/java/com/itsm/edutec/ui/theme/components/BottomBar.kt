@@ -3,41 +3,39 @@ package com.itsm.edutec.ui.theme.components
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Apps
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Preview
 import androidx.compose.material.icons.outlined.Apps
 import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.outlined.Preview
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.sp
+import com.itsm.edutec.ui.theme.navigation.StudentTab
 
 @Composable
-fun BottomBar() {
-    var selectedItem by rememberSaveable { mutableIntStateOf(0) }
-    val items = listOf("Principal", "Novedades", "Favoritos")
-    val selectedIcons = listOf(Icons.Filled.Person, Icons.Filled.Apps, Icons.Filled.Star)
-    val unselectedIcons =
-        listOf(Icons.Outlined.Person, Icons.Outlined.Apps, Icons.Outlined.Star)
+fun BottomBar(
+    selectedTab: StudentTab,
+    onTabSelected: (StudentTab) -> Unit
+) {
+    val items = StudentTab.entries.toTypedArray()
+    val selectedIcons = listOf(Icons.Filled.Preview, Icons.Filled.Apps, Icons.Filled.Person)
+    val unselectedIcons = listOf(Icons.Outlined.Preview, Icons.Outlined.Apps, Icons.Outlined.Person)
 
     NavigationBar {
-        items.forEachIndexed { index, item ->
+        items.forEachIndexed { index, tab ->
             NavigationBarItem(
                 icon = {
                     Icon(
-                        if (selectedItem == index) selectedIcons[index] else unselectedIcons[index],
-                        contentDescription = item
+                        if (selectedTab == tab) selectedIcons[index] else unselectedIcons[index],
+                        contentDescription = tab.title
                     )
                 },
-                label = { Text(item, fontSize = 12.sp) },
-                selected = selectedItem == index,
-                onClick = { selectedItem = index }
+                label = { Text(tab.title, fontSize = 12.sp) },
+                selected = selectedTab == tab,
+                onClick = { onTabSelected(tab) }
             )
         }
     }
