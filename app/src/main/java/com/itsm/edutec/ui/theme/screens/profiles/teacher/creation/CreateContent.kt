@@ -188,6 +188,8 @@ fun CreateAnnouncementForm(
     val isLoading = viewModel.isLoading
     val errorMessage = viewModel.errorMessage
 
+    val isFormValid = title.isNotBlank() && description.isNotBlank()
+
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -224,19 +226,17 @@ fun CreateAnnouncementForm(
 
         Button(
             onClick = {
-                if (title.isNotBlank() && description.isNotBlank()) {
-                    viewModel.createAnnouncement(
-                        courseId = courseId,
-                        title = title,
-                        content = description
-                    ) {
-                        title = ""
-                        description = ""
-                        navController.popBackStack()
-                    }
+                viewModel.createAnnouncement(
+                    courseId = courseId,
+                    title = title,
+                    content = description
+                ) {
+                    title = ""
+                    description = ""
+                    navController.popBackStack()
                 }
             },
-            enabled = !isLoading,
+            enabled = isFormValid && !isLoading,
             modifier = Modifier.align(Alignment.End)
         ) {
             Text(if (isLoading) "Creando..." else "Crear anuncio")
@@ -256,6 +256,8 @@ fun CreateAssignmentForm(
 
     val isLoading = viewModel.isLoading
     val errorMessage = viewModel.errorMessage
+
+    val isFormValid = title.isNotBlank() && description.isNotBlank()
 
     Column(
         modifier = Modifier
@@ -293,19 +295,17 @@ fun CreateAssignmentForm(
 
         Button(
             onClick = {
-                if (title.isNotBlank() && description.isNotBlank()) {
-                    viewModel.createAssignment(
-                        courseId = courseId,
-                        title = title,
-                        description = description,
-                    ) {
-                        title = ""
-                        description = ""
-                        navController.popBackStack()
-                    }
+                viewModel.createAssignment(
+                    courseId = courseId,
+                    title = title,
+                    description = description,
+                ) {
+                    title = ""
+                    description = ""
+                    navController.popBackStack()
                 }
             },
-            enabled = !isLoading,
+            enabled = isFormValid && !isLoading,
             modifier = Modifier.align(Alignment.End)
         ) {
             Text(if (isLoading) "Creando..." else "Crear tarea")
@@ -325,6 +325,8 @@ fun CreateMaterialForm(
 
     val isLoading = viewModel.isLoading
     val errorMessage = viewModel.errorMessage
+
+    val isFormValid = title.isNotBlank() && content.isNotBlank()
 
     Column(
         modifier = Modifier
@@ -362,19 +364,17 @@ fun CreateMaterialForm(
 
         Button(
             onClick = {
-                if (title.isNotBlank()) {
-                    viewModel.createMaterial(
-                        courseId = courseId,
-                        title = title,
-                        content = content,
-                    ) {
-                        title = ""
-                        content = ""
-                        navController.popBackStack()
-                    }
+                viewModel.createMaterial(
+                    courseId = courseId,
+                    title = title,
+                    content = content,
+                ) {
+                    title = ""
+                    content = ""
+                    navController.popBackStack()
                 }
             },
-            enabled = !isLoading,
+            enabled = isFormValid && !isLoading,
             modifier = Modifier.align(Alignment.End)
         ) {
             Text(if (isLoading) "Publicando..." else "Publicar material")
