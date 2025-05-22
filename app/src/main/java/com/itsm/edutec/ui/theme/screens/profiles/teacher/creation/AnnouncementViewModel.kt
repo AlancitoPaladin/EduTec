@@ -8,11 +8,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itsm.edutec.ui.theme.api.CourseApiClient
 import com.itsm.edutec.ui.theme.screens.profiles.teacher.content.AnnouncementRequest
-import com.itsm.edutec.ui.theme.session.SessionManager
 import kotlinx.coroutines.launch
 
 class AnnouncementViewModel(
-    private val sessionManager: SessionManager
 ) : ViewModel() {
 
     var isLoading by mutableStateOf(false)
@@ -37,8 +35,7 @@ class AnnouncementViewModel(
 
             try {
                 val announcement = AnnouncementRequest(title = title, content = content)
-                val response =
-                    CourseApiClient.courseService.createAnnouncement(courseId, announcement)
+                val response = CourseApiClient.courseService.createAnnouncement(courseId, announcement)
                 creationSuccess = true
                 onSuccess()
 

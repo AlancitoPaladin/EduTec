@@ -36,29 +36,24 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.itsm.edutec.ui.theme.session.SessionManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateContent(id: String, navController: NavController) {
-    val context = LocalContext.current
-    val sessionManager = remember { SessionManager(context) }
-
     val announcementViewModel: AnnouncementViewModel = viewModel(
-        factory = AnnouncementFactory(sessionManager)
+        factory = AnnouncementFactory()
     )
     val assignmentViewModel: AssignmentViewModel = viewModel(
-        factory = AssignmentViewModelFactory(sessionManager)
+        factory = AssignmentViewModelFactory()
     )
     val materialViewModel: MaterialViewModel = viewModel(
-        factory = MaterialViewModelFactory(sessionManager)
+        factory = MaterialViewModelFactory()
     )
 
     val isDarkTheme = isSystemInDarkTheme()
@@ -350,7 +345,7 @@ fun CreateMaterialForm(
         OutlinedTextField(
             value = content,
             onValueChange = { content = it },
-            label = { Text("Título") },
+            label = { Text("Material") },
             modifier = Modifier.fillMaxWidth()
         )
 
