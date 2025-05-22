@@ -158,7 +158,7 @@ fun AnnouncementItem(announcement: Announcement, isEditable: Boolean) {
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Text("- ${announcement.title}:${announcement.content}", modifier = Modifier.weight(1f))
+        Text("- ${announcement.title}: ${announcement.content}", modifier = Modifier.weight(1f))
         if (isEditable) {
             IconButton(onClick = {
                 showDialog = true
@@ -226,7 +226,7 @@ fun MaterialItem(material: Material, isEditable: Boolean) {
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Text("- ${material.title}:${material.content}", modifier = Modifier.weight(1f))
+        Text("- ${material.title}: ${material.content}", modifier = Modifier.weight(1f))
         if (isEditable) {
             IconButton(onClick = { showDialog = true }) {
                 Icon(Icons.Default.Delete, contentDescription = "Eliminar material")
