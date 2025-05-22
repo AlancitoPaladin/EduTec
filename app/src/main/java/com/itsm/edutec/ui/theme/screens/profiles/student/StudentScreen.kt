@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardDoubleArrowRight
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
@@ -33,6 +34,7 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -43,6 +45,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -357,6 +360,8 @@ fun VariousCoursesCard(courses: List<CoursePreview>, navController: NavControlle
 
 @Composable
 fun CourseCategory(categoryName: String) {
+    var showDialog by remember { mutableStateOf(false) }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -371,14 +376,34 @@ fun CourseCategory(categoryName: String) {
             color = MaterialTheme.colorScheme.primary
         )
 
-        IconButton(onClick = {
-            Log.d("CourseCategory", "Función en desarrollo 🚧")
-        }) {
+        IconButton(
+            onClick = {
+                Log.i("CourseCategory", "función en desarrollo")
+                showDialog = true
+            }
+        ) {
             Icon(
                 imageVector = Icons.Filled.KeyboardDoubleArrowRight,
                 contentDescription = "Ver más",
                 tint = MaterialTheme.colorScheme.primary
             )
         }
+    }
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            confirmButton = {
+                TextButton(onClick = { showDialog = false }) {
+                    Text("OK")
+                }
+            },
+            title = {
+                Text("Aviso")
+            },
+            text = {
+                Text("Función en desarrollo, pronto será épica.")
+            }
+        )
     }
 }
