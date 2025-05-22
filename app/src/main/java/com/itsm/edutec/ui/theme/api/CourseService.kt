@@ -53,5 +53,4 @@ interface CourseService {
         @Path("course_id") courseId: String,
         @Part file: MultipartBody.Part
     ): Response<UploadResponse>
-
 }

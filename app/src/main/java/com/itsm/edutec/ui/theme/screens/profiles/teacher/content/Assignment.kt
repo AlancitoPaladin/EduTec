@@ -10,8 +10,5 @@ data class Assignment(
     val title: String,
 
     @SerializedName("description")
-    val description: String,
-
-    @SerializedName("dueDate")
-    val dueDate: String
+    val description: String
 )

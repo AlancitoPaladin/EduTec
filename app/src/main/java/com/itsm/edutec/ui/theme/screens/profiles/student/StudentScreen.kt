@@ -1,5 +1,6 @@
 package com.itsm.edutec.ui.theme.screens.profiles.student
 
+import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,6 +24,7 @@ import androidx.compose.material.icons.filled.KeyboardDoubleArrowRight
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -31,17 +33,21 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -53,6 +59,8 @@ import com.itsm.edutec.ui.theme.components.BottomBar
 import com.itsm.edutec.ui.theme.components.MyGlideImageWithView
 import com.itsm.edutec.ui.theme.models.CourseViewModel
 import com.itsm.edutec.ui.theme.navigation.StudentTab
+import com.itsm.edutec.ui.theme.session.SessionManager
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,6 +72,10 @@ fun StudentScreen(navController: NavController, courseViewModel: CourseViewModel
     val courses by courseViewModel.courses.collectAsState()
     val isLoading by courseViewModel.isLoading.collectAsState()
     val error by courseViewModel.error.collectAsState()
+    val scope = rememberCoroutineScope()
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val context = LocalContext.current
+    val sessionManager = remember { SessionManager(context) }
 
     LaunchedEffect(Unit) {
         courseViewModel.fetchCourses()
@@ -77,6 +89,10 @@ fun StudentScreen(navController: NavController, courseViewModel: CourseViewModel
         containerColor = if (isDarkTheme) Color(0xFF262626) else Color.White,
         topBar = {
             CenterAlignedTopAppBar(
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                ),
                 title = {
                     Text(
                         text = "EduTec",
@@ -89,9 +105,17 @@ fun StudentScreen(navController: NavController, courseViewModel: CourseViewModel
                 },
                 navigationIcon = {
                     IconButton(
-                        onClick = { navController.popBackStack() },
+                        onClick = {
+                            scope.launch {
+                                drawerState.close()
+                                sessionManager.clearSession()
+                                navController.navigate("login") {
+                                    popUpTo(0) { inclusive = true }
+                                }
+                            }
+                        },
                         colors = IconButtonDefaults.iconButtonColors(
-                            contentColor = if (isDarkTheme) Color.White else Color.Cyan
+                            contentColor = if (isDarkTheme) Color.White else Color.Black
                         ),
                     ) {
                         Icon(
@@ -190,7 +214,7 @@ fun CourseCard(
             ElevatedCard(
                 onClick = { onClick(course) },
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                    containerColor = Color.Black,
                 ),
                 elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
                 modifier = Modifier.size(width = 300.dp, height = 210.dp)
@@ -219,7 +243,7 @@ fun CourseCard(
                             fontSize = 12.sp,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
-                            color = if (!isSystemInDarkTheme()) Color.Black else Color.White,
+                            color = Color.White,
                             style = MaterialTheme.typography.bodyLarge,
                             modifier = Modifier
                                 .weight(1f)
@@ -263,7 +287,7 @@ fun VariousCoursesCard(courses: List<CoursePreview>, navController: NavControlle
                         ElevatedCard(
                             onClick = { navController.navigate("courseDetails/${course.id}") },
                             colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.onSecondaryContainer
+                                containerColor = Color.Black,
                             ),
                             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                             modifier = Modifier
@@ -316,7 +340,7 @@ fun VariousCoursesCard(courses: List<CoursePreview>, navController: NavControlle
 
                                         Text(
                                             text = "${course.stars} ★",
-                                            color = Color.White,
+                                            color = Color.Yellow,
                                             fontSize = 12.sp
                                         )
                                     }
@@ -347,7 +371,9 @@ fun CourseCategory(categoryName: String) {
             color = MaterialTheme.colorScheme.primary
         )
 
-        IconButton(onClick = { /* Navegar a categoría */ }) {
+        IconButton(onClick = {
+            Log.d("CourseCategory", "Función en desarrollo 🚧")
+        }) {
             Icon(
                 imageVector = Icons.Filled.KeyboardDoubleArrowRight,
                 contentDescription = "Ver más",

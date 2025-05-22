@@ -9,9 +9,6 @@ data class Announcement (
     @SerializedName("title")
     val title: String,
 
-    @SerializedName("description")
-    val description: String,
-
-    @SerializedName("date")
-    val date: String
+    @SerializedName("content")
+    val content: String,
 )

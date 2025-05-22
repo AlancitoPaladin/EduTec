@@ -31,7 +31,6 @@ class TeacherViewModel(
         fetchCourses()
     }
 
-
     fun fetchCourses() {
         viewModelScope.launch {
             isRefreshing = true

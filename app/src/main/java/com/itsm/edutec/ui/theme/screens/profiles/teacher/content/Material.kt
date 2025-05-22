@@ -3,15 +3,9 @@ package com.itsm.edutec.ui.theme.screens.profiles.teacher.content
 import com.google.gson.annotations.SerializedName
 
 data class Material(
-    @SerializedName("_id")
-    val id: String,
+    @SerializedName("title")
+    val title: String,
 
-    @SerializedName("fileName")
-    val fileName: String,
-
-    @SerializedName("fileUrl")
-    val fileUrl: String,
-
-    @SerializedName("fileType")
-    val fileType: String
+    @SerializedName("content")
+    val content: String
 )

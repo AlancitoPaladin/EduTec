@@ -106,7 +106,7 @@ fun VerticalCourseList(courses: List<CoursePreview>, onClick: (CoursePreview) ->
             ElevatedCard(
                 onClick = { onClick(course) },
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.onSecondaryContainer
+                    containerColor = Color.Black
                 ),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                 modifier = Modifier
@@ -159,7 +159,7 @@ fun VerticalCourseList(courses: List<CoursePreview>, onClick: (CoursePreview) ->
 
                             Text(
                                 text = "${course.stars} ★",
-                                color = Color.White,
+                                color = Color.Yellow,
                                 fontSize = 12.sp
                             )
                         }

@@ -1,5 +1,6 @@
 package com.itsm.edutec.ui.theme.screens.profiles.student
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,7 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -43,6 +45,7 @@ fun CourseViewScreen(
     val course by viewModel.selectedCourse.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
+    val isDarkTheme = isSystemInDarkTheme()
 
     LaunchedEffect(courseId) {
         viewModel.fetchCourseById(courseId)
@@ -51,6 +54,10 @@ fun CourseViewScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                ),
                 title = {
                     Text(
                         text = course?.course ?: "Mi curso",
@@ -65,7 +72,7 @@ fun CourseViewScreen(
                     IconButton(
                         onClick = { navController.popBackStack() },
                         colors = IconButtonDefaults.iconButtonColors(
-                            contentColor = Color.White
+                            contentColor = if (isDarkTheme) Color.White else Color.Black
                         ),
                     ) {
                         androidx.compose.material3.Icon(

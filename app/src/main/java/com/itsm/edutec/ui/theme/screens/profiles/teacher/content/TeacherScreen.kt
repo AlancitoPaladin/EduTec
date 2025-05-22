@@ -295,7 +295,24 @@ fun TeacherView(padding: PaddingValues, viewModel: TeacherViewModel, navControll
                         .padding(horizontal = 16.dp),
                     horizontalAlignment = Alignment.Start
                 ) {
-                    CourseView(viewModel.selectedCourse, true)
+                    if (viewModel.selectedCourse != null) {
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight()
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(horizontal = 16.dp),
+                                horizontalAlignment = Alignment.Start
+                            ) {
+                                CourseView(viewModel.selectedCourse, true)
+                            }
+                        }
+                    } else {
+                        NoCoursesAvailable()
+                    }
                 }
             }
         }
@@ -330,5 +347,12 @@ fun FuncionalityInProgress() {
             text = "Funcionalidad en desarrollo...",
             style = MaterialTheme.typography.bodyLarge
         )
+    }
+}
+
+@Composable
+fun NoCoursesAvailable() {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Text("No tienes cursos disponibles todavía.")
     }
 }

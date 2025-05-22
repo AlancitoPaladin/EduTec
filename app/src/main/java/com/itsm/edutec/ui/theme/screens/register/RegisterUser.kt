@@ -41,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -69,6 +70,9 @@ fun RegisterUser(navController: NavController, apiService: ApiService) {
     var confirmPassword by rememberSaveable { mutableStateOf("") }
     var role by rememberSaveable { mutableStateOf("") }
     val context = LocalContext.current
+
+    var isPasswordHidden by rememberSaveable { mutableStateOf(true) }
+    var isConfirmPasswordHidden by rememberSaveable { mutableStateOf(true) }
 
     val uiState = viewModel.uiState
 
@@ -154,18 +158,22 @@ fun RegisterUser(navController: NavController, apiService: ApiService) {
                     "Ingresa la contraseña",
                     password,
                     { password = it },
-                    passwordHidden = true
-                ) {
-                }
-                Spacer(modifier = Modifier.height(3.dp))
+                    passwordHidden = isPasswordHidden,
+                    onPasswordVisibilityToggle = {
+                        isPasswordHidden = !isPasswordHidden
+                    }
+                )
 
                 RegisterPasswordField(
                     "Confirma la contraseña",
                     confirmPassword,
                     { confirmPassword = it },
-                    passwordHidden = true
-                ) {
-                }
+                    passwordHidden = isConfirmPasswordHidden,
+                    onPasswordVisibilityToggle = {
+                        isConfirmPasswordHidden = !isConfirmPasswordHidden
+                    }
+                )
+
                 Spacer(modifier = Modifier.height(3.dp))
 
                 RoleMenu(role = role) { role = it }
@@ -251,6 +259,8 @@ fun RegisterPasswordField(
     passwordHidden: Boolean,
     onPasswordVisibilityToggle: () -> Unit
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     TextField(
         value = value,
         onValueChange = onValueChange,
@@ -269,7 +279,7 @@ fun RegisterPasswordField(
         ),
         keyboardActions = KeyboardActions(
             onDone = {
-                // Lógica adicional aquí si es necesaria
+                keyboardController?.hide()
             }
         ),
         colors = TextFieldDefaults.colors(

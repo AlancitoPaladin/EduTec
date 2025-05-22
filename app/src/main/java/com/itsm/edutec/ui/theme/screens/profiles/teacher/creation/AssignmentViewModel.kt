@@ -8,11 +8,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itsm.edutec.ui.theme.api.CourseApiClient
 import com.itsm.edutec.ui.theme.screens.profiles.teacher.content.AssignmentRequest
-import com.itsm.edutec.ui.theme.session.SessionManager
 import kotlinx.coroutines.launch
 
 class AssignmentViewModel(
-    private val sessionManager: SessionManager
 ) : ViewModel() {
     var isLoading by mutableStateOf(false)
         private set
@@ -27,7 +25,6 @@ class AssignmentViewModel(
         courseId: String,
         title: String,
         description: String,
-        dueDate: String,
         onSuccess: () -> Unit
     ) {
         viewModelScope.launch {
@@ -36,7 +33,7 @@ class AssignmentViewModel(
             errorMessage = null
 
             try {
-                val assignment = AssignmentRequest(title, description, dueDate)
+                val assignment = AssignmentRequest(title, description)
                 CourseApiClient.courseService.createAssignment(courseId, assignment)
                 creationSuccess = true
                 onSuccess()

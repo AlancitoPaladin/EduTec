@@ -1,6 +1,7 @@
 package com.itsm.edutec.ui.theme.screens.profiles.student
 
 import android.widget.Toast
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -251,6 +252,7 @@ fun EnrollCourse(
     studentEmail: String,
     enrollViewModel: EnrollViewModel = viewModel()
 ) {
+    val isDarkTheme = isSystemInDarkTheme()
     val isLoading by enrollViewModel.isLoading.collectAsState()
     val enrollmentStatus by enrollViewModel.enrollmentStatus.collectAsState()
 
@@ -268,7 +270,9 @@ fun EnrollCourse(
                 enrollViewModel.enroll(courseId, studentEmail)
             }
         },
-        colors = ButtonDefaults.elevatedButtonColors(Color.White),
+        colors = ButtonDefaults.elevatedButtonColors(
+            if (isDarkTheme) Color.White else Color.Black
+        ),
         enabled = !isLoading
     ) {
         if (isLoading) {
@@ -278,7 +282,7 @@ fun EnrollCourse(
                 color = Color.Black
             )
         } else {
-            Text("Inscribirme", color = Color.Black)
+            Text("Inscribirme", color = if (isDarkTheme) Color.Black else Color.White)
         }
     }
 }

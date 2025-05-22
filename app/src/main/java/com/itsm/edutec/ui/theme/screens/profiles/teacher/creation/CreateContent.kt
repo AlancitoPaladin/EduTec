@@ -107,7 +107,8 @@ fun CreateContent(id: String, navController: NavController) {
                 id = id,
                 announcementViewModel = announcementViewModel,
                 assignmentViewModel = assignmentViewModel,
-                materialViewModel = materialViewModel
+                materialViewModel = materialViewModel,
+                navController
             )
         }
     }
@@ -119,7 +120,8 @@ fun Election(
     id: String,
     announcementViewModel: AnnouncementViewModel,
     assignmentViewModel: AssignmentViewModel,
-    materialViewModel: MaterialViewModel
+    materialViewModel: MaterialViewModel,
+    navController: NavController
 ) {
     var expanded by remember { mutableStateOf(false) }
     var selectedOption by remember { mutableStateOf<ContentType?>(null) }
@@ -164,9 +166,14 @@ fun Election(
         Spacer(modifier = Modifier.height(16.dp))
 
         when (selectedOption) {
-            ContentType.ANNOUNCEMENT -> CreateAnnouncementForm(id, announcementViewModel)
-            ContentType.ASSIGNMENT -> CreateAssignmentForm(id, assignmentViewModel)
-            ContentType.MATERIAL -> CreateMaterialForm(id, materialViewModel)
+            ContentType.ANNOUNCEMENT -> CreateAnnouncementForm(
+                id,
+                announcementViewModel,
+                navController
+            )
+
+            ContentType.ASSIGNMENT -> CreateAssignmentForm(id, assignmentViewModel, navController)
+            ContentType.MATERIAL -> CreateMaterialForm(id, materialViewModel, navController)
             null -> { /* Nada aún */
             }
         }
@@ -177,7 +184,8 @@ fun Election(
 @Composable
 fun CreateAnnouncementForm(
     courseId: String,
-    viewModel: AnnouncementViewModel
+    viewModel: AnnouncementViewModel,
+    navController: NavController
 ) {
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
@@ -229,6 +237,7 @@ fun CreateAnnouncementForm(
                     ) {
                         title = ""
                         description = ""
+                        navController.popBackStack()
                     }
                 }
             },
@@ -244,11 +253,11 @@ fun CreateAnnouncementForm(
 @Composable
 fun CreateAssignmentForm(
     courseId: String,
-    viewModel: AssignmentViewModel
+    viewModel: AssignmentViewModel,
+    navController: NavController
 ) {
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
-    var dueDate by remember { mutableStateOf("") }
 
     val isLoading = viewModel.isLoading
     val errorMessage = viewModel.errorMessage
@@ -294,11 +303,10 @@ fun CreateAssignmentForm(
                         courseId = courseId,
                         title = title,
                         description = description,
-                        dueDate = dueDate
                     ) {
                         title = ""
                         description = ""
-                        dueDate = ""
+                        navController.popBackStack()
                     }
                 }
             },
@@ -314,11 +322,11 @@ fun CreateAssignmentForm(
 @Composable
 fun CreateMaterialForm(
     courseId: String,
-    viewModel: MaterialViewModel
+    viewModel: MaterialViewModel,
+    navController: NavController
 ) {
-    var fileName by remember { mutableStateOf("") }
-    var fileUrl by remember { mutableStateOf("") }
-    var fileType by remember { mutableStateOf("") }
+    var title by remember { mutableStateOf("") }
+    var content by remember { mutableStateOf("") }
 
     val isLoading = viewModel.isLoading
     val errorMessage = viewModel.errorMessage
@@ -333,16 +341,16 @@ fun CreateMaterialForm(
         Spacer(modifier = Modifier.height(8.dp))
 
         OutlinedTextField(
-            value = fileName,
-            onValueChange = { fileName = it },
+            value = title,
+            onValueChange = { title = it },
             label = { Text("Título") },
             modifier = Modifier.fillMaxWidth()
         )
 
         OutlinedTextField(
-            value = fileType,
-            onValueChange = { fileType = it },
-            label = { Text("Contenido") },
+            value = content,
+            onValueChange = { content = it },
+            label = { Text("Título") },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -359,16 +367,15 @@ fun CreateMaterialForm(
 
         Button(
             onClick = {
-                if (fileName.isNotBlank() && fileType.isNotBlank()) {
+                if (title.isNotBlank()) {
                     viewModel.createMaterial(
                         courseId = courseId,
-                        fileType = fileType,
-                        fileUrl = fileUrl,
-                        fileName = fileName
+                        title = title,
+                        content = content,
                     ) {
-                        fileType = ""
-                        fileUrl = ""
-                        fileName = ""
+                        title = ""
+                        content = ""
+                        navController.popBackStack()
                     }
                 }
             },

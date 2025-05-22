@@ -1,5 +1,6 @@
 package com.itsm.edutec.ui.theme.screens.profiles
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -150,9 +151,9 @@ fun AnnouncementItem(announcement: Announcement, isEditable: Boolean) {
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Text("- ${announcement.title}: ${announcement.description}", modifier = Modifier.weight(1f))
+        Text("- ${announcement.title}: ${announcement.content}", modifier = Modifier.weight(1f))
         if (isEditable) {
-            IconButton(onClick = { /* Abrir diálogo para editar */ }) {
+            IconButton(onClick = { Log.d("CourseCategory", "Función en desarrollo 🚧") }) {
                 Icon(Icons.Default.Edit, contentDescription = "Editar nuncio")
             }
         }
@@ -166,9 +167,8 @@ fun AssignmentItem(assignment: Assignment, isEditable: Boolean) {
         modifier = Modifier.fillMaxWidth()
     ) {
         Text("- ${assignment.title}: ${assignment.description}", modifier = Modifier.weight(1f))
-        Text("- ${assignment.dueDate}", modifier = Modifier.weight(1f))
         if (isEditable) {
-            IconButton(onClick = { /* Acción de edición */ }) {
+            IconButton(onClick = { Log.d("CourseCategory", "Función en desarrollo 🚧")}) {
                 Icon(Icons.Default.Edit, contentDescription = "Editar tarea")
             }
         }
@@ -181,9 +181,10 @@ fun MaterialItem(material: Material, isEditable: Boolean) {
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Text("- ${material.fileName}", modifier = Modifier.weight(1f))
+        Text("- ${material.title}", modifier = Modifier.weight(1f))
+        Text("- ${material.content}", modifier = Modifier.weight(1f))
         if (isEditable) {
-            IconButton(onClick = { /* Eliminar/editar material */ }) {
+            IconButton(onClick = { Log.d("CourseCategory", "Función en desarrollo 🚧") }) {
                 Icon(Icons.Default.Delete, contentDescription = "Eliminar material")
             }
         }

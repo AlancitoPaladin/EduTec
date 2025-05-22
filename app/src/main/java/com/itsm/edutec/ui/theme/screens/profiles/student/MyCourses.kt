@@ -17,7 +17,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -77,6 +76,10 @@ fun MyCourses(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                item {
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+
                 items(courses) { course ->
                     VerticalCourseCard(course = course) {
                         navController.navigate("courseView/${course.id}")
@@ -95,7 +98,7 @@ fun VerticalCourseCard(
     ElevatedCard(
         onClick = { onClick(course) },
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.onSecondaryContainer
+            containerColor = Color.Black
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         modifier = Modifier

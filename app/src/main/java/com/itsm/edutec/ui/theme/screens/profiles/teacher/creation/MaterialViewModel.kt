@@ -8,11 +8,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itsm.edutec.ui.theme.api.CourseApiClient
 import com.itsm.edutec.ui.theme.screens.profiles.teacher.content.MaterialRequest
-import com.itsm.edutec.ui.theme.session.SessionManager
 import kotlinx.coroutines.launch
 
 class MaterialViewModel(
-    private val sessionManager: SessionManager
 ) : ViewModel() {
 
     var isLoading by mutableStateOf(false)
@@ -26,9 +24,8 @@ class MaterialViewModel(
 
     fun createMaterial(
         courseId: String,
-        fileName: String,
-        fileUrl: String,
-        fileType: String,
+        title: String,
+        content: String,
         onSuccess: () -> Unit
     ) {
         viewModelScope.launch {
@@ -37,7 +34,7 @@ class MaterialViewModel(
             errorMessage = null
 
             try {
-                val material = MaterialRequest(fileName, fileUrl, fileType)
+                val material = MaterialRequest(title, content)
                 CourseApiClient.courseService.createMaterial(courseId, material)
                 creationSuccess = true
                 onSuccess()

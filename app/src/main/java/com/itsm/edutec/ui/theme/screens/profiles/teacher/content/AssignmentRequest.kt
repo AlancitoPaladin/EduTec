@@ -8,7 +8,4 @@ data class AssignmentRequest(
 
     @SerializedName("description")
     val description: String,
-
-    @SerializedName("due_date")
-    val due_date: String
 )
