@@ -93,6 +93,12 @@ fun AddContent(viewModel: TeacherViewModel, onCourseCreated: () -> Unit) {
         "Septiembre" to 9, "Octubre" to 10, "Noviembre" to 11, "Diciembre" to 12
     )
 
+    val isFormValid = listOf(title, description, imageUrl, category, level, start, end)
+        .all { it.isNotBlank() } &&
+            (monthIndex[start] ?: 0) in 1..12 &&
+            (monthIndex[end] ?: 0) in 1..12 &&
+            (monthIndex[start]!! < monthIndex[end]!!)
+
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -178,33 +184,33 @@ fun AddContent(viewModel: TeacherViewModel, onCourseCreated: () -> Unit) {
 
                 monthError = null
 
-                if (title.isNotBlank() && description.isNotBlank()) {
-                    viewModel.createCourse(
-                        title = title,
-                        description = description,
-                        imageUrl = imageUrl,
-                        category = category,
-                        level = level,
-                        start = start,
-                        end = end
-                    ) {
-                        title = ""
-                        description = ""
-                        imageUrl = ""
-                        category = ""
-                        level = ""
-                        start = ""
-                        end = ""
-                        onCourseCreated()
-                    }
+                viewModel.createCourse(
+                    title = title,
+                    description = description,
+                    imageUrl = imageUrl,
+                    category = category,
+                    level = level,
+                    start = start,
+                    end = end
+                ) {
+                    title = ""
+                    description = ""
+                    imageUrl = ""
+                    category = ""
+                    level = ""
+                    start = ""
+                    end = ""
+                    onCourseCreated()
                 }
             },
+            enabled = isFormValid,
             modifier = Modifier.align(Alignment.End)
         ) {
             Text("Crear Curso")
         }
     }
 }
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
