@@ -1,27 +1,36 @@
 package com.itsm.edutec.ui.theme.screens.profiles.student
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,6 +43,7 @@ import androidx.navigation.NavController
 import com.itsm.edutec.ui.theme.api.CoursePreview
 import com.itsm.edutec.ui.theme.components.MyGlideImageWithView
 import com.itsm.edutec.ui.theme.session.SessionManager
+import kotlinx.coroutines.launch
 
 @Composable
 fun MyCourses(
@@ -93,62 +103,60 @@ fun MyCourses(
 @Composable
 fun VerticalCourseCard(
     course: CoursePreview,
-    onClick: (CoursePreview) -> Unit
+    onClick: (CoursePreview) -> Unit,
 ) {
+    val context = LocalContext.current
+    var showDialog by remember { mutableStateOf(false) }
+
     ElevatedCard(
         onClick = { onClick(course) },
-        colors = CardDefaults.cardColors(
-            containerColor = Color.Black
-        ),
+        colors = CardDefaults.cardColors(containerColor = Color.Black),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         modifier = Modifier
             .width(360.dp)
-            .height(110.dp)
+            .height(140.dp)
+            .padding(8.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .padding(18.dp, 18.dp)
-                .height(90.dp)
-                .width(300.dp)
-        ) {
-            Box(
+        Box(modifier = Modifier.fillMaxSize()) {
+            Row(
                 modifier = Modifier
-                    .width(75.dp)
-                    .height(85.dp),
-                contentAlignment = Alignment.Center
+                    .fillMaxSize()
+                    .padding(12.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                MyGlideImageWithView(
-                    imageUrl = course.image,
+                Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight()
-                )
-            }
+                        .width(75.dp)
+                        .height(100.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    MyGlideImageWithView(
+                        imageUrl = course.image,
+                        modifier = Modifier
+                            .fillMaxSize()
+                    )
+                }
 
-            Spacer(modifier = Modifier.width(18.dp))
+                Spacer(modifier = Modifier.width(16.dp))
 
-            Box(
-                modifier = Modifier
-                    .fillMaxSize(),
-                contentAlignment = Alignment.CenterStart
-            ) {
-                Column {
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.Center
+                ) {
                     Text(
                         text = course.course,
                         color = Color.White,
-                        fontSize = 12.sp,
+                        fontSize = 14.sp,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
-
                     Text(
                         text = course.description,
-                        maxLines = 1,
+                        maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                         color = Color.White,
                         fontSize = 12.sp
                     )
-
                     Text(
                         text = "${course.stars} ★",
                         color = Color.White,
@@ -156,7 +164,72 @@ fun VerticalCourseCard(
                     )
                 }
             }
+
+            IconButton(
+                onClick = { showDialog = true },
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(4.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Delete,
+                    contentDescription = "Eliminar",
+                    tint = Color.White
+                )
+            }
+
+            IconButtonWithDialog(
+                id = course.id,
+                showDialog = showDialog,
+                onDialogChange = { showDialog = it },
+                onConfirm = {
+                    Toast.makeText(context, "Curso eliminado", Toast.LENGTH_SHORT).show()
+                }
+            )
         }
     }
 }
 
+
+@Composable
+fun IconButtonWithDialog(
+    id: String,
+    showDialog: Boolean,
+    onDialogChange: (Boolean) -> Unit,
+    onConfirm: () -> Unit,
+    viewModel: DeleteViewModel = viewModel()
+) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { onDialogChange(false) },
+            title = { Text("¿Estás seguro?") },
+            text = { Text("Esta acción no se puede deshacer.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    onDialogChange(false)
+
+                    scope.launch {
+                        val sessionManager = SessionManager(context)
+                        val userEmail = sessionManager.getUserEmail()
+
+                        if (userEmail != null) {
+                            viewModel.deleteCourse(id, userEmail)
+                        }
+
+                        onConfirm()
+                    }
+                }) {
+                    Text("Confirmar")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { onDialogChange(false) }) {
+                    Text("Cancelar")
+                }
+            }
+        )
+    }
+}

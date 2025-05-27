@@ -3,10 +3,12 @@ package com.itsm.edutec.ui.theme.api
 import com.itsm.edutec.ui.theme.components.LoginRequest
 import com.itsm.edutec.ui.theme.components.LoginResponse
 import com.itsm.edutec.ui.theme.models.UserRequest
+import com.itsm.edutec.ui.theme.screens.profiles.student.DeleteRequest
 import com.itsm.edutec.ui.theme.screens.register.PasswordRecoveryRequest
 import com.itsm.edutec.ui.theme.screens.register.RegisterRequest
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -33,6 +35,9 @@ interface ApiService {
 
     @POST("get_courses_by_student")
     suspend fun getCoursesByStudent(@Body request: UserRequest): Response<List<CoursePreview>>
+
+    @DELETE("delete_course_student")
+    suspend fun deleteCourseStudent(@Body request: DeleteRequest): Response<Unit>
 
     @POST("/add_course_student")
     suspend fun enrollCourse(@Body request: EnrollRequest): Response<EnrollmentResponse>
