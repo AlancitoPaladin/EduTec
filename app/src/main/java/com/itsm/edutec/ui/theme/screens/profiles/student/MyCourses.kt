@@ -48,6 +48,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun MyCourses(
     viewModel: MyCoursesViewModel = viewModel(),
+    deleteViewModel: DeleteViewModel = viewModel(),
     navController: NavController,
     padding: PaddingValues
 ) {
@@ -55,6 +56,7 @@ fun MyCourses(
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         val sessionManager = SessionManager(context)
@@ -89,11 +91,20 @@ fun MyCourses(
                 item {
                     Spacer(modifier = Modifier.height(16.dp))
                 }
-
                 items(courses) { course ->
-                    VerticalCourseCard(course = course) {
-                        navController.navigate("courseView/${course.id}")
-                    }
+                    VerticalCourseCard(
+                        course = course,
+                        viewModel = deleteViewModel,
+                        onClick = { navController.navigate("courseView/${course.id}") },
+                        onDeleted = {
+                            scope.launch {
+                                val sessionManager = SessionManager(context)
+                                val email = sessionManager.getUserEmail()
+                                email?.let { viewModel.fetchStudentCourses(it) }
+                            }
+                        }
+                    )
+
                 }
             }
         }
@@ -104,6 +115,8 @@ fun MyCourses(
 fun VerticalCourseCard(
     course: CoursePreview,
     onClick: (CoursePreview) -> Unit,
+    viewModel: DeleteViewModel,
+    onDeleted: () -> Unit
 ) {
     val context = LocalContext.current
     var showDialog by remember { mutableStateOf(false) }
@@ -184,7 +197,9 @@ fun VerticalCourseCard(
                 onDialogChange = { showDialog = it },
                 onConfirm = {
                     Toast.makeText(context, "Curso eliminado", Toast.LENGTH_SHORT).show()
-                }
+                    onDeleted()
+                },
+                viewModel = viewModel
             )
         }
     }
