@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -118,7 +119,6 @@ fun VerticalCourseCard(
     viewModel: DeleteViewModel,
     onDeleted: () -> Unit
 ) {
-    val context = LocalContext.current
     var showDialog by remember { mutableStateOf(false) }
 
     ElevatedCard(
@@ -153,7 +153,9 @@ fun VerticalCourseCard(
                 Spacer(modifier = Modifier.width(16.dp))
 
                 Column(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .widthIn(max = 200.dp)
+                        .padding(end = 8.dp),
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
@@ -196,7 +198,6 @@ fun VerticalCourseCard(
                 showDialog = showDialog,
                 onDialogChange = { showDialog = it },
                 onConfirm = {
-                    Toast.makeText(context, "Curso eliminado", Toast.LENGTH_SHORT).show()
                     onDeleted()
                 },
                 viewModel = viewModel
@@ -225,16 +226,24 @@ fun IconButtonWithDialog(
             confirmButton = {
                 TextButton(onClick = {
                     onDialogChange(false)
-
                     scope.launch {
                         val sessionManager = SessionManager(context)
                         val userEmail = sessionManager.getUserEmail()
 
                         if (userEmail != null) {
-                            viewModel.deleteCourse(id, userEmail)
+                            val deleted = viewModel.deleteCourse(id, userEmail)
+                            if (deleted) {
+                                Toast.makeText(context, "Curso eliminado", Toast.LENGTH_SHORT)
+                                    .show()
+                                onConfirm()
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    viewModel.error.value ?: "Error desconocido",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
-
-                        onConfirm()
                     }
                 }) {
                     Text("Confirmar")

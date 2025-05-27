@@ -36,7 +36,7 @@ interface ApiService {
     suspend fun getCoursesByStudent(@Body request: UserRequest): Response<List<CoursePreview>>
 
     @POST("delete_course_student")
-    fun deleteCourseStudent(
+    suspend fun deleteCourseStudent(
         @Body request: DeleteRequest
     ): Response<Any>
 
