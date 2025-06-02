@@ -43,6 +43,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -77,6 +79,8 @@ fun TeacherScreen(navController: NavController) {
     val scope = rememberCoroutineScope()
     val selectedPrefItem = remember { mutableStateOf<String?>(null) }
 
+    val courses by remember { derivedStateOf { teacherViewModel.courses } }
+
     ModalNavigationDrawer(
         drawerContent = {
             ModalDrawerSheet {
@@ -100,7 +104,7 @@ fun TeacherScreen(navController: NavController) {
                         style = MaterialTheme.typography.titleMedium
                     )
 
-                    teacherViewModel.courses.forEach { course ->
+                    courses.forEach { course ->
                         DrawerOption(
                             label = course.course,
                             isSelected = teacherViewModel.selectedCourse?.id == course.id,
@@ -111,6 +115,7 @@ fun TeacherScreen(navController: NavController) {
                             }
                         )
                     }
+
 
                     HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
